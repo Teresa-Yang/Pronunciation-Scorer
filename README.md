@@ -1,8 +1,5 @@
-# Speech-to-Transcript
-Speech to Transcript using Python and Flask.
-
-This is an example of [TheCodex project code for speech recognition](https://github.com/TheCodex-Me/Projects)
-<br></br>
+# Pronunciation Scorer
+Tracking pronunciation accuracy using Python and Flask.
 
 ---
 ### To run:
