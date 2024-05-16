@@ -3,44 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>सूक्तम्</title>
+    <!-- <title>सूक्तम्</title> -->
+    <title>Pronucniation Scorer</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
 </head>
-
-<style>
-    textarea {
-        resize: none;
-        text-align: justify;
-        vertical-align: center;
-        text-align-last: center;
-    }
-
-    .ta_fs {
-        font-size: 20px;
-        color: #ff0000;
-    }
-
-    p {
-        text-align: center;
-    }
-
-    h1 {
-        text-align: center;
-    }
-
-    div {
-        text-align: center;
-    }
-
-</style>
-
-
 
 <body>
     <h1>Pronunciation Scorer</h1>
     <div>
         <p>
-            <button id="start_button" disabled>Start recording</button>
+            <button id="start_button">Start recording</button>
             <button id="stop_button" disabled>Stop recording</button>
             <!-- <button id="random_button">Get a Random Phrase</button> -->
         </p>
@@ -66,7 +40,7 @@
     </div> -->
 
     <br/>
-    <div>
+    <div class="center-container">
         <button id="score_button">Get my score!</button>
         <p></p>
         <label for="score"></label><textarea readonly class="ta_fs" id="score" rows="5" cols="10">Score</textarea>
