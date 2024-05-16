@@ -1,0 +1,77 @@
+h1, p, input {
+    font-family: 'Lato', sans-serif;
+}
+
+#speechContainer {
+    margin: 20px;
+}
+
+#submitButton {
+    background-color: #0191FE;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 30px;
+    margin-top: 20px;
+}
+
+#submitButton:hover {
+    cursor: pointer;
+}
+
+#speechTranscriptContainer {
+    margin-top: 20px;
+}
+
+#speechText {
+    font-size: 18px;
+    width: 500px;
+}
+
+#toggleVoiceInput {
+    background-color: #0191FE;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 30px;
+    margin-top: 20px;
+}
+
+#toggleVoiceInput:hover {
+    cursor: pointer;
+}
+
+/* #toggleVoiceInput::after {
+    content: "Start Recording";
+    vertical-align: super;
+} */
+
+/* #toggleVoiceInput[aria-expanded="false"]::after {
+    content: "Start Recording";
+}
+
+#toggleVoiceInput[aria-expanded="true"]::after {
+    content: "Stop Recording";
+} */
+
+/* #realTimeTranscription #toggleVoiceInput {
+    background-color: #0191FE;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 30px;
+    margin-top: 20px;
+}
+
+#realTimeTranscription #toggleVoiceInput:hover {
+    cursor: pointer;
+}
+
+#realTimeTranscription #toggleVoiceInput::after {
+    content: "Start Recording";
+    vertical-align: super;
+}
+
+#realTimeTranscription #toggleVoiceInput[aria-expanded="false"]::after {
+    content: "Stop Recording";
+} */

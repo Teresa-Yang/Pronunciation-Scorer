@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>सूक्तम्</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<style>
+    textarea {
+        resize: none;
+        text-align: justify;
+        vertical-align: center;
+        text-align-last: center;
+    }
+
+    .ta_fs {
+        font-size: 20px;
+        color: #ff0000;
+    }
+
+    p {
+        text-align: center;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    div {
+        text-align: center;
+    }
+
+</style>
+
+
+
+<body>
+    <h1>Pronunciation Scorer</h1>
+    <div>
+        <p>
+            <button id="start_button" disabled>Start recording</button>
+            <button id="stop_button" disabled>Stop recording</button>
+            <!-- <button id="random_button">Get a Random Phrase</button> -->
+        </p>
+    </div>
+
+
+    <!-- <div> 
+        <p>
+            <label for="sanskrit"></label><textarea readonly id="sanskrit" rows="1" cols="25">Sanskrit</textarea>
+            <label for="english"></label><textarea readonly id="english" rows="1" cols="25">English</textarea>
+        </p>
+    </div> -->
+
+    <div>
+        <p>Your Audio:</p>
+        <audio controls id="recorded_audio"></audio>
+    </div>
+
+
+    <!-- <div>
+        <p> Prompt: </p>
+        <audio controls id="prompted_audio"></audio>
+    </div> -->
+
+    <br/>
+    <div>
+        <button id="score_button">Get my score!</button>
+        <p></p>
+        <label for="score"></label><textarea readonly class="ta_fs" id="score" rows="5" cols="10">Score</textarea>
+    </div>
+
+</body>
+
+
+
+
+<script type="text/javascript">
+    let start_button_element = document.getElementById("start_button");
+    let stop_button_element = document.getElementById("stop_button");
+    let score_button_element = document.getElementById("score_button");
+    // let random_button_element = document.getElementById("random_button");
+    // let prompted_audio_element = document.getElementById("prompted_audio");
+    let recorded_audio_element = document.getElementById("recorded_audio");
+
+    let audio_name = '';
+    let record = null;
+    let audioChunks = []
+
+    score_button_element.onclick = () => {
+        $.ajax({
+            type: 'GET',
+            url: '/get_score/' + audio_name + "/",
+            success: function (result) {
+                $('#score').val(result);
+            }
+        });
+    };
+
+
+    stop_button_element.onclick = () => {
+        start_button_element.disabled = false;
+        stop_button_element.disabled = true;
+        record.stop();
+    };
+
+    start_button_element.onclick = () => {
+        start_button_element.disabled = true;
+        stop_button_element.disabled = false;
+        audioChunks = [];
+        record.start();
+    };
+
+    // random_button_element.onclick = () => {
+    //     start_button_element.disabled = false;
+
+    //     $.ajax(
+    //         {
+    //             type: 'GET',
+    //             url: '/get_random_line',
+    //             success: function (result) {
+    //                 const list = result.split(",");
+    //                 $('#sanskrit').val(list[2]);
+    //                 $('#english').val(list[1]);
+    //                 audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
+
+    //                 fetch('/get_random_audio/' + audio_name)
+    //                     .then(res => {
+    //                         return res.body.getReader().read().then(result => {
+    //                             return result
+    //                         });
+    //                     })
+    //                     .then(data => {
+    //                         const blob = new Blob([data.value], { type: "audio/mpeg-3" });
+
+    //                         prompted_audio_element.src = URL.createObjectURL(blob);
+    //                         prompted_audio_element.controls = true;
+    //                         prompted_audio_element.autoplay = true;
+    //                     });
+    //             }
+    //         }
+    //     );
+    // };
+
+    navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then(stream => {
+            //create new recorder object
+            record = new MediaRecorder(stream);
+
+            //stream data from recorder to list
+            record.ondataavailable = e => {
+                audioChunks.push(e.data);
+                //once recorder is done send data to server
+                if (record.state === "inactive") {
+                    let blob = new Blob(audioChunks, { type: 'audio/mpeg-3' });
+
+                    //enabled audio playback
+                    recorded_audio_element.src = URL.createObjectURL(blob);
+                    recorded_audio_element.controls = true;
+                    recorded_audio_element.autoplay = false;
+
+                    //create file to send to server
+                    const form = new FormData();
+                    form.append('file', blob, audio_name + ".mp3");
+                    $.ajax({
+                        type: 'POST',
+                        url: '/save-audio',
+                        data: form,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            console.log("Data Received!");
+                        }
+                    });
+                }
+            }
+        });
+
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Speech Recognition in Python and Flask</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
+</head>
+
+<body>
+    <div id="speechContainer">
+        <h1>Upload new File</h1>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <br />
+            <input type="submit" id="submitButton" value="Transcribe" />
+        </form>
+
+        {% if transcript != "" %}
+        <div id="speechTranscriptContainer">
+            <h1>Transcript</h1>
+            <p id="speechText">{{ transcript }}</p>
+        </div>
+        {% endif %}
+
+        <div id="realTimeTranscription">
+            <h1>Real Time Transcription</h1>
+            <button id="toggleVoiceInput" aria-expanded="false">Start Recording</button>
+            <pre id="realTimeSpeechText"></pre>
+        </div>
+
+    </div> -->
+
+
+
+<!-- <script>
+        $(document).ready(function () {
+            // Define helper functions
+            function resetRealTimeDisplay() {
+                getLastElementChild("realTimeSpeechText").innerHTML = "";
+            }
+
+            function finalResultHandler(event) {
+                getLastElementChild("realTimeSpeechText").innerHTML += `${event.results[0][0].transcript}\n`;
+                resetRealTimeDisplay();
+            }
+
+            function partialResultHandler(event) {
+                getLastElementChild("realTimeSpeechText").innerHTML += `${event.results[0][0].transcript}`;
+            }
+
+            // Utiliy function
+            function getLastElementChild(elementId) {
+                const element = document.getElementById(elementId);
+                return element && element.lastElementChild;
+            }
+
+            // Move the variable declarations outside the ready function
+            var recognizing = false;
+            var recognizer = null;
+
+            $("#toggleVoiceInput").on("click", function () {
+                var expandedState = $(this).attr("aria-expanded") || "false";
+
+                if (expandedState == "false") {
+                    $(this).text("Stop Recording");
+                } else {
+                    $(this).text("Start Recording");
+                    recognizer.abort();
+                    recognizing = false;
+                }
+
+                $("#realTimeTranscription").toggle();
+            });
+
+            // Create the recognizer object after declaring variables
+            recognizer = new webkitSpeechRecognition();
+
+            // Initialization and event binding
+            function initRecognizer() {
+                recognizer.continuous = true;
+                recognizer.interimResults = true;
+                recognizer.lang = "en";
+
+                recognizer.onstart = function (event) {
+                    recognizing = true;
+                    console.log("start recognizing")
+                    $("#toggleVoiceInput").prop("placeholder", "Listening...");
+                };
+
+                recognizer.onaudiostart = function (event) {
+                    console.log("Voice input started.");
+                };
+
+                recognizer.onend = function (event) {
+                    recognizing = false;
+                    resetRealTimeDisplay();
+                    $("#toggleVoiceInput").prop("placeholder", "Click here to speak");
+                };
+
+                recognizer.onerror = function (event) {
+                    resetRealTimeDisplay();
+                    $("#toggleVoiceInput").prop("placeholder", "Try again!");
+                };
+
+                recognizer.onresult = function (event) {
+                    if (event.results[0].isFinal) {
+                        finalResultHandler(event);
+                    } else {
+                        partialResultHandler(event);
+                    }
+                };
+            }
+
+            // Start recording
+            initRecognizer();
+            startRecognizing();
+
+            function startRecognizing() {
+                recognizer.start();
+            }
+        });
+    </script> -->
+
+<!-- </body>
+
+</html> -->
