@@ -2,7 +2,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+}
 
 h1, p, input {
     font-family: 'Lato', sans-serif;
@@ -27,12 +27,45 @@ textarea {
     text-align-last: center;
 }
 
-
-
-
-#speechContainer {
-    margin: 20px;
+button {
+    background-color: #0191FE;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 30px;
+    margin-bottom: 20px;
 }
+
+button:hover {
+    cursor: pointer;
+}
+
+#score_button {
+    margin-top: 40px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    font-family: 'Lato', sans-serif;
+    text-align: center;
+    font-size: 12px;
+    background-color: #0191FE;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 30px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+
+
+/* #speechContainer {
+    margin: 20px;
+} */
 
 #submitButton {
     background-color: #0191FE;
@@ -41,10 +74,6 @@ textarea {
     border: none;
     padding: 10px 30px;
     margin-top: 20px;
-}
-
-#submitButton:hover {
-    cursor: pointer;
 }
 
 #speechTranscriptContainer {
