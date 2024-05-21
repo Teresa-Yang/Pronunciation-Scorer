@@ -12,59 +12,33 @@
 
 <body>
     <h1>Pronunciation Scorer</h1>
+
+    <form method="post" enctype="multipart/form-data" id="uploaded-file-form">
+        <input id="upload_audio_button" type="file" name=file accept="audio/*"/>
+    </form>
+    
     <div>
         <button id="start_button">Start recording</button>
         <button id="stop_button" disabled>Stop recording</button>
-
-        <label for="upload_audio_button" class="custom-file-upload">Upload audio file</label>
-        <input id="upload_audio_button" type="file" accept="audio/*" />
-
-        <!-- <input type="file" id="audioInput" accept="audio/*"/>
-        <button id="upload_audio_button">Upload audio file</button> -->
-        <!-- <button id="random_button">Get a Random Phrase</button> -->
+        <label for="upload_audio_button" form="uploaded-file-form" class="custom-file-upload">Upload audio file</label>
     </div>
-
-
-    <!-- <div> 
-        <p>
-            <label for="sanskrit"></label><textarea readonly id="sanskrit" rows="1" cols="25">Sanskrit</textarea>
-            <label for="english"></label><textarea readonly id="english" rows="1" cols="25">English</textarea>
-        </p>
-    </div> -->
-
+    
     <div>
         <p>Your Audio:</p>
         <audio controls id="recorded_audio"></audio>
     </div>
 
-
-    <!-- <div>
-        <p> Prompt: </p>
-        <audio controls id="prompted_audio"></audio>
-    </div> -->
-
-    <!-- <div id="speechContainer" class="center-container">
-        <p>Upload Audio File</p>
-        <form method="post" enctype="multipart/form-data">
-            <input type="file" name="file" />
-            <br/>
-            <input type="submit" id="submitButton" value="Transcribe" />
-        </form>
-
-        {% if transcript != "" %}
-        <div id="speechTranscriptContainer">
-            <h1>Transcript</h1>
-            <p id="speechText">{{ transcript }}</p>
-        </div>
-        {% endif %}
-    </div> -->
-
     <div id="speechTranscriptContainer" class="center-container">
+        <input type="submit" id="submitButton" form="uploaded-file-form" value="Transcribe"/>
         <p>Transcript</p>
-        <label for="transcript"></label><textarea readonly class="ta_fs" id="transcript" rows="3" cols="30"></textarea>
-
+       
+        <label for="transcript"></label>
+        <textarea readonly class="ta_fs" id="transcript" rows="3" cols="50">
+        {% if transcript|length > 0 %}
+            {{ transcript }}
+        {% endif %}
+        </textarea>
     </div>
-
 
     <br />
     <div class="center-container">
@@ -75,21 +49,53 @@
 
 </body>
 
-
+<!-- <body>
+    <div id="speechContainer">
+        <h1>Upload new File</h1>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="audio/*"/>
+            <br>
+            <input type="submit" id="submitButton" value="Transcribe"/>
+        </form>
+    
+        {% if transcript != "" %}
+            <div id="speechTranscriptContainer">
+                <h1>Transcript</h1>
+                <p id="speechText">{{ transcript }}</p>
+            </div>
+        {% endif %}
+    </div>
+    
+</body> -->
 
 
 <script type="text/javascript">
     let start_button_element = document.getElementById("start_button");
     let stop_button_element = document.getElementById("stop_button");
     let score_button_element = document.getElementById("score_button");
-    // let random_button_element = document.getElementById("random_button");
-    // let prompted_audio_element = document.getElementById("prompted_audio");
     let recorded_audio_element = document.getElementById("recorded_audio");
     let uploaded_audio_element = document.getElementById("upload_audio_button");
+    let transcriptArea = document.getElementById('transcript');
 
     let audio_name = '';
     let record = null;
-    let audioChunks = []
+    let audioChunks = [];
+
+    // TODO: audio_name missing
+
+    // // Function to handle audio submission
+    // function submitAudio(file) {
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: '/save_audio/' + audio_name + "/",
+    //         success: function (result) {
+    //             console.log("successful")
+    //             $('#transcript').val(result);
+    //         }
+    //     });
+
+    // }
+
 
     score_button_element.onclick = () => {
         $.ajax({
@@ -117,38 +123,6 @@
 
     uploaded_audio_element.addEventListener('change', loadAudioFromUpload);
 
-
-    // random_button_element.onclick = () => {
-    //     start_button_element.disabled = false;
-
-    //     $.ajax(
-    //         {
-    //             type: 'GET',
-    //             url: '/get_random_line',
-    //             success: function (result) {
-    //                 const list = result.split(",");
-    //                 $('#sanskrit').val(list[2]);
-    //                 $('#english').val(list[1]);
-    //                 audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
-
-    //                 fetch('/get_random_audio/' + audio_name)
-    //                     .then(res => {
-    //                         return res.body.getReader().read().then(result => {
-    //                             return result
-    //                         });
-    //                     })
-    //                     .then(data => {
-    //                         const blob = new Blob([data.value], { type: "audio/mpeg-3" });
-
-    //                         prompted_audio_element.src = URL.createObjectURL(blob);
-    //                         prompted_audio_element.controls = true;
-    //                         prompted_audio_element.autoplay = true;
-    //                     });
-    //             }
-    //         }
-    //     );
-    // };
-
     function loadAudioFromUpload() {
         const inputElement = document.getElementById("upload_audio_button");
         const file = inputElement.files[0];
@@ -157,43 +131,47 @@
         recorded_audio_element.src = URL.createObjectURL(file);
         recorded_audio_element.controls = true;
         recorded_audio_element.autoplay = false;
+
+        //submitAudio(file);
     }
 
     navigator.mediaDevices
-    .getUserMedia({ audio: true })
-    .then(stream => {
-        //create new recorder object
-        record = new MediaRecorder(stream);
+        .getUserMedia({ audio: true })
+        .then(stream => {
+            //create new recorder object
+            record = new MediaRecorder(stream);
 
-        //stream data from recorder to list
-        record.ondataavailable = e => {
-            audioChunks.push(e.data);
-            //once recorder is done send data to server
-            if (record.state === "inactive") {
-                let blob = new Blob(audioChunks, { type: 'audio/mpeg-3' });
+            //stream data from recorder to list
+            record.ondataavailable = e => {
+                audioChunks.push(e.data);
+                //once recorder is done send data to server
+                if (record.state === "inactive") {
+                    let blob = new Blob(audioChunks, { type: 'audio/mpeg-3' });
 
-                //enabled audio playback
-                recorded_audio_element.src = URL.createObjectURL(blob);
-                recorded_audio_element.controls = true;
-                recorded_audio_element.autoplay = false;
+                    //enabled audio playback
+                    recorded_audio_element.src = URL.createObjectURL(blob);
+                    recorded_audio_element.controls = true;
+                    recorded_audio_element.autoplay = false;
 
-                //create file to send to server
-                const form = new FormData();
-                form.append('file', blob, audio_name + ".mp3");
-                $.ajax({
-                    type: 'POST',
-                    url: '/save-audio',
-                    data: form,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    success: function () {
-                        console.log("Data Received!");
-                    }
-                });
+                    //create file to send to server
+                    const form = new FormData();
+                    form.append('file', blob, audio_name + ".mp3");
+                    $.ajax({
+                        type: 'POST',
+                        url: '/',
+                        data: form,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            console.log("Data Received!");
+                        }
+                    });
+
+                }
+                submitAudio(file);
             }
-        }
-    });
+        });
 
 
 </script>

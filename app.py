@@ -1,64 +1,64 @@
+import os
 from flask import Flask, flash, render_template, request, redirect
 import speech_recognition as sr
+
+
+# _path = Path(__file__).parent.__str__() + "\\files"
+# if not os.path.exists(_path):
+#     os.mkdir(_path)
 
 app = Flask(__name__)
 
 
-# Navigation will create GET request for website and POST request for audio data as mp3 file
 
-@app.route("/", methods=["GET", "POST"])
+# # Dummy response to satisfy website if it does get request to .../favicon.ico
+# @app.route('/favicon.ico', methods=['GET'])
+# def favicon():
+#     return '<h1></h1>'
+
+# # Home page, render the "record.html" template
+# @app.route('/')
+# def home():
+#     return render_template('index.html', name=None)
+
+# Navigation will create GET request for website and POST request for audio data as mp3 file
+@app.route('/', methods=['GET', 'POST'])
 def index():
     transcript = ""
-    recording = False
     if request.method == "POST":
-        if "voice-input" in request.form:
-            print("VOICE INPUT FORM SUBMITTED")
-            transcript = recognize_voice_input()
-            recording = False
-        elif "file" in request.files:
-            print("FILE UPLOADED FOR TRANSCRIPTION")
-            transcript = recognize_uploaded_file()
+        print("Audio data received")
 
-    return render_template('index.html', transcript=transcript, recording=recording)
+        # Check if file existence
+        if 'file' not in request.files:
+            flash("Sorry! File not found!")
+            return redirect(request.url)
 
-def recognize_voice_input():
-    recognizer = sr.Recognizer()
+        file = request.files['file']
 
-    with sr.Mic() as source:
-        print("Listening...")
-        recognizer.adjust_for_ambient_noise(source)
-        audio = recognizer.listen(source)
+        # Check that file is named correctly
+        if file.filename == '':
+            flash("Sorry! File name is empty!")
+            return redirect(request.url)
 
-    try:
-        transcript = recognizer.recognize_google(audio, key=None)
-        return transcript
+        # # save file in hosts dir
+        # path = Path(__file__).parent.__str__() + f"\\files\\{file.filename}"
+        # file.save(path)
+
+        #Using Python SpeechRecognition 
+        if file:
+            recognizer = sr.Recognizer()
+            audioFile = sr.AudioFile(file)
+
+            # Obtain audio from uploaded file
+            with audioFile as source:
+                data = recognizer.record(source)
+                transcript = recognizer.recognize_google(data, key=None)
+
+    return render_template('index.html', transcript=str(transcript))
     
-    except Exception as e:
-        print(f"Error while trying to transcribe voice input: {e}")
-        return ""
-
-def recognize_uploaded_file():
-    if "file" not in request.files:
-        flash("Sorry. File not found.")
-        return redirect(request.url)
-
-    file = request.files["file"]
-
-    if file.filename == "":
-        flash("Sorry. File name is empty.")
-        return redirect(request.url)
-
-    recognizer = sr.Recognizer()
-    audioFile = sr.AudioFile(file)
-
-    with audioFile as source:
-        data = recognizer.record(source)
-        transcript = recognizer.recognize_google(data, key=None)
-
-    return transcript
-
-
-
+    # # TODO: add scoring capability and return score
+    # if request.method == "GET":
+    #     return ""
 
 
 
@@ -96,5 +96,5 @@ def recognize_uploaded_file():
 #     return render_template('index.html', transcript=transcript)
 
 
-# if __name__ == "__main__":
-#     app.run(debug=True, threaded=True)
+if __name__ == "__main__":
+    app.run(debug=True, threaded=True)

@@ -1,6 +1,8 @@
 # Pronunciation Scorer
 Tracking pronunciation accuracy using Python and Flask.
 
+This app is to help users improve their pronunciation. Built with the reference to [Samskrita-Bharati/sUktam: An application built to help users practice Sanskrit pronunciation.](https://github.com/Samskrita-Bharati/sUktam)
+
 ---
 ### To run:
 * Enter `flask run` in the terminal/comand prompt within the project directory

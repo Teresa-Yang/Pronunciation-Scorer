@@ -9,22 +9,10 @@ h1, p, input {
     text-align: center;
 }
 
-.ta_fs {
-    font-size: 20px;
-    color: #ff0000;
-}
-
-.center-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 textarea {
     resize: none;
-    text-align: justify;
+    text-align: left;
     vertical-align: center;
-    text-align-last: center;
 }
 
 button {
@@ -40,18 +28,29 @@ button:hover {
     cursor: pointer;
 }
 
-#score_button {
-    margin-top: 40px;
+input:hover {
+    cursor: pointer;
 }
 
 input[type="file"] {
     display: none;
 }
 
+.ta_fs {
+    font-size: 16px;
+    color: #008cff;
+}
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .custom-file-upload {
     font-family: 'Lato', sans-serif;
     text-align: center;
-    font-size: 12px;
+    font-size: 13px;
     background-color: #0191FE;
     color: white;
     border-radius: 5px;
@@ -66,6 +65,10 @@ input[type="file"] {
 /* #speechContainer {
     margin: 20px;
 } */
+
+#score_button {
+    margin-top: 40px;
+}
 
 #submitButton {
     background-color: #0191FE;
