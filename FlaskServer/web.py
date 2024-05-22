@@ -1,100 +1,105 @@
 import os
-from flask import Flask, flash, render_template, request, redirect
-import speech_recognition as sr
+import random
+from pathlib import Path
 
+from flask import Flask, flash, send_from_directory
+from flask import redirect
+from flask import render_template
+from flask import request
+from flask_session import Session
+from librosa import load
 
-# _path = Path(__file__).parent.__str__() + "\\files"
-# if not os.path.exists(_path):
-#     os.mkdir(_path)
+from FlaskServer.ScoringFunctions import scoring_functions_withVAD
 
+_path = Path(__file__).parent.__str__() + "\\files"
+if not os.path.exists(_path):
+    os.mkdir(_path)
+
+UPLOAD_FOLDER = 'files'
 app = Flask(__name__)
+sess = Session()
+
+app.config['SECRET_KEY'] = 'secret_secret'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SESSION_TYPE'] = 'filesystem'
+
+sess.init_app(app)
 
 
+# Get score from recently uploaded file
+@app.route('/get_score/<audio_id>/', methods=['GET'])
+def get_score(audio_id):
+    # find user audio from "files"
+    path_user = Path(__file__).parent.__str__() + "\\files\\" + audio_id + ".mp3"
 
-# # Dummy response to satisfy website if it does get request to .../favicon.ico
-# @app.route('/favicon.ico', methods=['GET'])
-# def favicon():
-#     return '<h1></h1>'
+    # find corresponding proper audio
+    path_proper = Path(__file__).parent.parent.__str__() + "\\hackathon_data\\" + audio_id + ".wav"
 
-# # Home page, render the "record.html" template
-# @app.route('/')
-# def home():
-#     return render_template('index.html', name=None)
+    user_series, sr = load(path_user, sr=16000)
+    proper_series, sr = load(path_proper, sr=16000)
+
+    return str(round(100 * scoring_functions_withVAD.score_pronunciation(proper_series, user_series))) + '%'
+
+
+# Dummy response to satisfy website if it does get request to .../favicon.ico
+@app.route('/favicon.ico', methods=['GET'])
+def favicon():
+    return '<h1></h1>'
+
+
+# Navigation to url will generate random choice and return to HTML
+@app.route('/get_random_line', methods=['GET'])
+def get_random_line():
+    path = Path(__file__).parent.__str__() + "\\reference_files.txt"
+    lines = open(path, encoding="UTF-8").readlines()[1:]
+    return random.choice(lines)
+
+
+# Home page, render the "index.html" template
+@app.route('/')
+def home():
+    return render_template('index.html', name=None)
+
 
 # Navigation will create GET request for website and POST request for audio data as mp3 file
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    transcript = ""
+@app.route('/save-record', methods=['GET', 'POST'])
+def save_record():
+    flash("saving")
     if request.method == "POST":
-        print("Audio data received")
-
-        # Check if file existence
+        # Sanity check on file existence
         if 'file' not in request.files:
             flash("Sorry! File not found!")
-            return redirect(request.url)
+            redirect(request.url)
 
         file = request.files['file']
 
-        # Check that file is named correctly
+        # Sanity check that file is named correctly
         if file.filename == '':
             flash("Sorry! File name is empty!")
-            return redirect(request.url)
+            redirect(request.url)
 
-        # # save file in hosts dir
-        # path = Path(__file__).parent.__str__() + f"\\files\\{file.filename}"
-        # file.save(path)
+        # save file in hosts dir
+        path = Path(__file__).parent.__str__() + f"\\files\\{file.filename}"
+        file.save(path)
 
-        #Using Python SpeechRecognition 
-        if file:
-            recognizer = sr.Recognizer()
-            audioFile = sr.AudioFile(file)
+        return "<h1>Success!</h1>"
 
-            # Obtain audio from uploaded file
-            with audioFile as source:
-                data = recognizer.record(source)
-                transcript = recognizer.recognize_google(data, key=None)
-
-    return render_template('index.html', transcript=str(transcript))
-    
-    # # TODO: add scoring capability and return score
-    # if request.method == "GET":
-    #     return ""
+    # TODO: add scoring capability and return score
+    if request.method == "GET":
+        return ""
 
 
+@app.route('/get_random_audio/<audio_id>/', methods=['GET'])
+def get_random_audio(audio_id):
+    path = Path(__file__).parent.parent.__str__() + "\\hackathon_data"
+    audio_id = audio_id + ".wav"
+    for file in os.listdir(path):
+        if file.endswith(audio_id):
+            return send_from_directory(
+                directory=path,
+                path=audio_id)
+    return None
 
 
-
-# @app.route("/", methods=["GET", "POST"])
-# def index():
-#     transcript = ""
-#     if request.method == "POST":
-#         print("FORM DATA RECEIVED")
-
-#         # Check if file exists
-#         if "file" not in request.files:
-#             flash("Sorry. File not found.")
-#             return redirect(request.url)
-
-#         file = request.files["file"]
-
-#         # Check if file is named correctly
-#         if file.filename == "":
-#             flash("Sorry. File name is empty.")
-#             return redirect(request.url)
-
-#         # Using Python SpeechRecognition 
-#         if file:
-#             recognizer = sr.Recognizer()
-#             audioFile = sr.AudioFile(file)
-
-#             # Obtain audio from uploaded file
-#             with audioFile as source:
-#                 data = recognizer.record(source)
-#                 transcript = recognizer.recognize_google(data, key=None)
-
-
-#     return render_template('index.html', transcript=transcript)
-
-
-if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+def run(host, port, debug):
+    app.run(host, port, debug)

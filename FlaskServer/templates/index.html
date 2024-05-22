@@ -13,89 +13,56 @@
 <body>
     <h1>Pronunciation Scorer</h1>
 
-    <form method="post" enctype="multipart/form-data" id="uploaded-file-form">
-        <input id="upload_audio_button" type="file" name=file accept="audio/*"/>
-    </form>
-    
     <div>
         <button id="start_button">Start recording</button>
         <button id="stop_button" disabled>Stop recording</button>
-        <label for="upload_audio_button" form="uploaded-file-form" class="custom-file-upload">Upload audio file</label>
+        <button id="random_button">Get a Random Phrase</button>
     </div>
-    
+
+    <div>
+        <label for="sanskrit"></label><textarea readonly id="sanskrit" rows="1" cols="25">Sanskrit</textarea>
+        <label for="english"></label><textarea readonly id="english" rows="1" cols="25">English</textarea>
+    </div>
+
     <div>
         <p>Your Audio:</p>
         <audio controls id="recorded_audio"></audio>
+        <p>Prompt:</p>
+        <audio controls id="prompted_audio"></audio>
     </div>
-
-    <div id="speechTranscriptContainer" class="center-container">
         <input type="submit" id="submitButton" form="uploaded-file-form" value="Transcribe"/>
-        <p>Transcript</p>
-       
+        <p>Transcript:</p>
+
         <label for="transcript"></label>
         <textarea readonly class="ta_fs" id="transcript" rows="3" cols="50">
         {% if transcript|length > 0 %}
             {{ transcript }}
         {% endif %}
         </textarea>
-    </div>
+    </div> -->
 
     <br />
     <div class="center-container">
-        <button id="score_button">Get my score!</button>
-        <p>Score</p>
+        <button id="score_button">Get my score</button>
+        <p>Score:</p>
         <label for="score"></label><textarea readonly class="ta_fs" id="score" rows="5" cols="10"></textarea>
     </div>
 
 </body>
 
-<!-- <body>
-    <div id="speechContainer">
-        <h1>Upload new File</h1>
-        <form method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept="audio/*"/>
-            <br>
-            <input type="submit" id="submitButton" value="Transcribe"/>
-        </form>
-    
-        {% if transcript != "" %}
-            <div id="speechTranscriptContainer">
-                <h1>Transcript</h1>
-                <p id="speechText">{{ transcript }}</p>
-            </div>
-        {% endif %}
-    </div>
-    
-</body> -->
-
-
 <script type="text/javascript">
     let start_button_element = document.getElementById("start_button");
     let stop_button_element = document.getElementById("stop_button");
     let score_button_element = document.getElementById("score_button");
+    let random_button_element = document.getElementById("random_button");
+
+    let prompted_audio_element = document.getElementById("prompted_audio");
     let recorded_audio_element = document.getElementById("recorded_audio");
-    let uploaded_audio_element = document.getElementById("upload_audio_button");
     let transcriptArea = document.getElementById('transcript');
 
     let audio_name = '';
     let record = null;
     let audioChunks = [];
-
-    // TODO: audio_name missing
-
-    // // Function to handle audio submission
-    // function submitAudio(file) {
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: '/save_audio/' + audio_name + "/",
-    //         success: function (result) {
-    //             console.log("successful")
-    //             $('#transcript').val(result);
-    //         }
-    //     });
-
-    // }
-
 
     score_button_element.onclick = () => {
         $.ajax({
@@ -121,19 +88,48 @@
         record.start();
     };
 
-    uploaded_audio_element.addEventListener('change', loadAudioFromUpload);
+    random_button_element.onclick = () => {
+        start_button_element.disabled = false;
+        $.ajax(
+            {
+                type: 'GET',
+                url: '/get_random_line',
+                success: function (result) {
+                    const list = result.split(",");
+                    $('#sanskrit').val(list[2]);
+                    $('#english').val(list[1]);
+                    audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
 
-    function loadAudioFromUpload() {
-        const inputElement = document.getElementById("upload_audio_button");
-        const file = inputElement.files[0];
+                    fetch('/get_random_audio/' + audio_name)
+                        .then(res => {
+                            return res.body.getReader().read().then(result => {
+                                return result
+                            });
+                        })
+                        .then(data => {
+                            const blob = new Blob([data.value], { type: "audio/mpeg-3" });
 
-        //enabled audio playback
-        recorded_audio_element.src = URL.createObjectURL(file);
-        recorded_audio_element.controls = true;
-        recorded_audio_element.autoplay = false;
+                            prompted_audio_element.src = URL.createObjectURL(blob);
+                            prompted_audio_element.controls = true;
+                            prompted_audio_element.autoplay = true;
+                        });
+                }
+            }
+        );
+    };
 
-        //submitAudio(file);
-    }
+    //
+    // function loadAudioFromUpload() {
+    //     const inputElement = document.getElementById("upload_audio_button");
+    //     const file = inputElement.files[0];
+
+    //     //enabled audio playback
+    //     recorded_audio_element.src = URL.createObjectURL(file);
+    //     recorded_audio_element.controls = true;
+    //     recorded_audio_element.autoplay = false;
+
+    //     //submitAudio(file);
+    // }
 
     navigator.mediaDevices
         .getUserMedia({ audio: true })
@@ -158,7 +154,7 @@
                     form.append('file', blob, audio_name + ".mp3");
                     $.ajax({
                         type: 'POST',
-                        url: '/',
+                        url: '/save-record',
                         data: form,
                         cache: false,
                         processData: false,
@@ -169,7 +165,6 @@
                     });
 
                 }
-                submitAudio(file);
             }
         });
 
