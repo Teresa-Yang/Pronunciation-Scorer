@@ -30,18 +30,7 @@
         <p>Prompt:</p>
         <audio controls id="prompted_audio"></audio>
     </div>
-        <input type="submit" id="submitButton" form="uploaded-file-form" value="Transcribe"/>
-        <p>Transcript:</p>
 
-        <label for="transcript"></label>
-        <textarea readonly class="ta_fs" id="transcript" rows="3" cols="50">
-        {% if transcript|length > 0 %}
-            {{ transcript }}
-        {% endif %}
-        </textarea>
-    </div> -->
-
-    <br />
     <div class="center-container">
         <button id="score_button">Get my score</button>
         <p>Score:</p>
@@ -58,7 +47,6 @@
 
     let prompted_audio_element = document.getElementById("prompted_audio");
     let recorded_audio_element = document.getElementById("recorded_audio");
-    let transcriptArea = document.getElementById('transcript');
 
     let audio_name = '';
     let record = null;
