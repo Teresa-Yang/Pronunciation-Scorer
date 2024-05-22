@@ -1,16 +1,12 @@
 # Pronunciation Scorer
 Tracking pronunciation accuracy using Python and Flask.
 
-This app is to help users improve their pronunciation. Built with the reference to [Samskrita-Bharati/sUktam: An application built to help users practice Sanskrit pronunciation.](https://github.com/Samskrita-Bharati/sUktam)
+This app is to help users improve their pronunciation. Built on top of what was done and with the reference to [Samskrita-Bharati/sUktam: An application built to help users practice Sanskrit pronunciation.](https://github.com/Samskrita-Bharati/sUktam)
 
----
-### To run:
-* Enter `flask run` in the terminal/comand prompt within the project directory
----
-### How to run if there are errors for dependencies or virtual environment (Personally used Visual Studio Code but should not matter on the IDE):
-* Clone the project
+### How to run:
+* Git clone GitHub into the desired destination: `https://github.com/Teresa-Yang/Pronunciation-Scorer.git`
 * Ensure you set up a virtual environment
-  * Navigate to the project directory if not already in it within the terminal/comand prompt
+  * Navigate to the project directory "Pronunciation-Scorer" if not already in it within the terminal/comand prompt
   * Remove the "env" folder:
     * `Remove-Item -Path 'env' -Recurse`
   * Initialize/recreate the virtual environment:
@@ -27,9 +23,7 @@ This app is to help users improve their pronunciation. Built with the reference 
       * `source env/bin/activate`
 * Install packages in the terminal/comand prompt with the requirements.txt file:
   * `pip install -r requirements.txt`
-* Run as a local server with `flask run`
-  * You should be given a localhost link to open in your browser and view the program.
+* Run 'python main.py host-ip port debug(y/n)'.
+  * Example: `python main.py 127.0.0.1 5000 True` in the terminal/command prompt
+* You should be given a localhost link to open in your browser and view the application.
 
- ---
- ### Upload audio files in wav format
- Use this converter to convert audio files if needed: https://cloudconvert.com/mp3-to-wav
