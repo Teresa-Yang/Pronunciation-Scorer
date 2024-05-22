@@ -7,8 +7,6 @@ This app is to help users improve their pronunciation. Built on top of what was 
 * Git clone GitHub into the desired destination: `https://github.com/Teresa-Yang/Pronunciation-Scorer.git`
 * Ensure you set up a virtual environment
   * Navigate to the project directory "Pronunciation-Scorer" if not already in it within the terminal/comand prompt
-  * Remove the "env" folder:
-    * `Remove-Item -Path 'env' -Recurse`
   * Initialize/recreate the virtual environment:
     * Windows (PowerShell):
       * `python -m venv env`
