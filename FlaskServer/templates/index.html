@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <!-- <title>सूक्तम्</title> -->
     <title>Pronucniation Scorer</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
 
 <body>
@@ -16,7 +17,7 @@
     <div>
         <button id="start_button">Start recording</button>
         <button id="stop_button" disabled>Stop recording</button>
-        <button id="random_button">Get a Random Phrase</button>
+        <button id="random_button">Get a random phrase</button>
     </div>
 
     <div>
@@ -37,9 +38,78 @@
         <label for="score"></label><textarea readonly class="ta_fs" id="score" rows="5" cols="10"></textarea>
     </div>
 
+    <div id="metrics" class="animate-bottom">
+        <div class=container>
+            <div id="summarytable">
+                <table>
+                    <tr>
+                        <th>Accuracy Score</th>
+                        <th>Fluency Score</th>
+                        <th>Completeness Score</th>
+                        <th>Pronunciation Score</th>
+                        <th id="woh">Words Omitted</th>
+                        <th id="wih">Extra Words Spoken</th>
+                    </tr>
+                    <tr>
+                        <td id="accuracyscore"></td>
+                        <td id="fluencyscore"></td>
+                        <td id="completenessscore"></td>
+                        <td id="pronscore"></td>
+                        <td id="wordsomitted"></td>
+                        <td id="wordsinserted"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="detailedtable">
+                <table>
+                    <tr id="wordrow"></tr>
+                    <tr id="phonemerow"></tr>
+                    <tr id="scorerow"></tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
 </body>
 
-<script type="text/javascript">
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+    random_button_element.onclick = () => {
+        start_button_element.disabled = false;
+        console.log("random button clicked");
+        $.ajax(
+            {
+                type: 'GET',
+                url: '/get_random_line',
+                success: function (result) {
+                    console.log("request successful");
+                    const list = result.split(",");
+                    $('#sanskrit').val(list[2]);
+                    $('#english').val(list[1]);
+                    audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
+
+                    fetch('/get_random_audio/' + audio_name)
+                        .then(res => {
+                            return res.body.getReader().read().then(result => {
+                                return result
+                            });
+                        })
+                        .then(data => {
+                            const blob = new Blob([data.value], { type: "audio/mpeg-3" });
+
+                            prompted_audio_element.src = URL.createObjectURL(blob);
+                            prompted_audio_element.controls = true;
+                            prompted_audio_element.autoplay = true;
+                        });
+                }
+            }
+        );
+    };
+</script> -->
+<!-- <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script> -->
     let start_button_element = document.getElementById("start_button");
     let stop_button_element = document.getElementById("stop_button");
     let score_button_element = document.getElementById("score_button");
@@ -106,19 +176,6 @@
         );
     };
 
-    //
-    // function loadAudioFromUpload() {
-    //     const inputElement = document.getElementById("upload_audio_button");
-    //     const file = inputElement.files[0];
-
-    //     //enabled audio playback
-    //     recorded_audio_element.src = URL.createObjectURL(file);
-    //     recorded_audio_element.controls = true;
-    //     recorded_audio_element.autoplay = false;
-
-    //     //submitAudio(file);
-    // }
-
     navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(stream => {
@@ -157,6 +214,6 @@
         });
 
 
-</script>
+</script> -->
 
 </html>
