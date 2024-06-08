@@ -43,7 +43,7 @@ class VAD:
         return audio_speech.numpy()
 
 
-vad_extractor = VAD()
+vad_extractor =  VAD()
 
 
 def compute_mfcc(x, fs):
