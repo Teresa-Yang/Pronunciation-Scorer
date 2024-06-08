@@ -1,0 +1,12 @@
+# Node modules (handled by Heroku)
+node_modules/
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+# Test and build directories
+test/
+spec/
+dist/
+# Other files
+*.md
