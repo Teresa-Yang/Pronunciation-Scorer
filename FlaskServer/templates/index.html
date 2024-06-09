@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    
 </head>
 
 <body>
@@ -77,39 +78,11 @@
 </body>
 
 <script src="{{ url_for('static', filename='index.js') }}"></script>
-    random_button_element.onclick = () => {
-        start_button_element.disabled = false;
-        console.log("random button clicked");
-        $.ajax(
-            {
-                type: 'GET',
-                url: '/get_random_line',
-                success: function (result) {
-                    console.log("request successful");
-                    const list = result.split(",");
-                    $('#sanskrit').val(list[2]);
-                    $('#english').val(list[1]);
-                    audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
 
-                    fetch('/get_random_audio/' + audio_name)
-                        .then(res => {
-                            return res.body.getReader().read().then(result => {
-                                return result
-                            });
-                        })
-                        .then(data => {
-                            const blob = new Blob([data.value], { type: "audio/mpeg-3" });
-
-                            prompted_audio_element.src = URL.createObjectURL(blob);
-                            prompted_audio_element.controls = true;
-                            prompted_audio_element.autoplay = true;
-                        });
-                }
-            }
-        );
-    };
-</script> -->
 <!-- <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script> -->
+<!-- <script src="{{ url_for('static', filename='microsoft.cognitiveservices.speech.sdk.bundle.js') }}"></script> -->
+ 
+<!-- <script>
     let start_button_element = document.getElementById("start_button");
     let stop_button_element = document.getElementById("stop_button");
     let score_button_element = document.getElementById("score_button");
