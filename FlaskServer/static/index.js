@@ -11,30 +11,30 @@
 // let recorded_audio_element = document.getElementById("recorded_audio");
 
 
-var accuracyscore = document.getElementById('accuracyscore');
-var fluencyscore = document.getElementById('fluencyscore');
-var completenessscore = document.getElementById('completenessscore');
-var pronscore = document.getElementById('pronscore');
-var wordsomitted = document.getElementById('wordsomitted');
-var wordsinserted = document.getElementById('wordsinserted');
-var omittedwords = "";
-var insertedwords = "";
-wordsinserted.style.display = "none";
+var accuracyScore = document.getElementById('accuracy_score');
+var fluencyScore = document.getElementById('fluency_score');
+var completenessScore = document.getElementById('completeness_score');
+var pronScore = document.getElementById('pron_score');
+var wordsOmitted = document.getElementById('words_omitted');
+var wordsInserted = document.getElementById('words_inserted');
+var omittedWords = "";
+var insertedWords = "";
+wordsInserted.style.display = "none";
 document.getElementById("wih").style.display = "none";
 
-var wordrow = document.getElementById('wordrow');
-var phonemerow = document.getElementById('phonemerow');
-var scorerow = document.getElementById('scorerow');
+var wordRow = document.getElementById('word_row');
+var phonemeRow = document.getElementById('phoneme_row');
+var scoreRow = document.getElementById('score_row');
 
-var reftext = document.getElementById('reftext');
-var formcontainer = document.getElementById('formcontainer');
-var ttbutton = document.getElementById('randomtt');
-var hbutton = document.getElementById('buttonhear');
-var recordingsList = document.getElementById('recordingsList');
-var ttsList = document.getElementById('ttsList');
-var lastgettstext;
+var refText = document.getElementById('ref_text');
+var formContainer = document.getElementById('form_container');
+var randomPhraseButton = document.getElementById('random_phrase_button');
+var hearButton = document.getElementById('hear_button');
+var recording = document.getElementById('recording');
+var phrase = document.getElementById('phrase');
+var lastGetPhraseText;
 var objectUrlMain;
-var wordaudiourls = new Array;
+var wordAudioUrls = new Array;
 
 var phthreshold1 = 80;
 var phthreshold2 = 60;
@@ -46,30 +46,30 @@ var audioContent;
 var start = false;
 var stop = false;
 var permission = false;
-var reftextval;
+var refTextVal;
 var gumStream; 						//stream from getUserMedia()
 var rec; 							//Recorder.js object
 var audioStream; 					//MediaStreamAudioSourceNode we'll be recording
-var blobpronun;
-var offsetsarr;
-var tflag = true;
-var wordlist;
+var blobPronun;
+var offsetsArr;
+var tFlag = true;
+var wordList;
 
 var t0 = 0;
 var t1;
 var at;
 
 window.onload = () => {
-    if (tflag) {
-        tflag = gettoken();
-        tflag = false;
+    if (tFlag) {
+        tFlag = getToken();
+        tFlag = false;
     }
 
 };
 
-function gettoken() {
+function getToken() {
     var request = new XMLHttpRequest();
-    request.open('POST', '/gettoken', true);
+    request.open('POST', '/get-token', true);
 
     // Callback function for when request completes
     request.onload = () => {
@@ -83,41 +83,41 @@ function gettoken() {
     return false;
 }
 
-function playword(k) {
-    var audio = document.getElementById('ttsaudio');
+// function playWord(k) {
+//     var audio = document.getElementById('phrase_audio');
+//     audio.playbackRate = 0.5;
+//     audio.currentTime = (offsetsArr[k] / 1000) + 0;
+
+//     var stopAfter = 10000;
+
+//     if (k != offsetsArr.length - 1) {
+//         stopAfter = (offsetsArr[k + 1] / 1000) + 0.01;
+//     }
+
+//     audio.play();
+
+//     var pausing_function = function () {
+//         if (this.currentTime >= stopAfter) {
+//             this.pause();
+//             this.currentTime = 0;
+//             stopAfter = 10000;
+//             // remove the event listener after you paused the playback
+//             this.removeEventListener("timeupdate", pausing_function);
+//             audio.playbackRate = 0.9;
+//         }
+//     };
+
+//     audio.addEventListener("timeupdate", pausing_function);
+
+// }
+
+function playWord(word) {
+    var audio = document.getElementById('phrase_audio');
     audio.playbackRate = 0.5;
-    audio.currentTime = (offsetsarr[k] / 1000) + 0;
 
-    var stopafter = 10000;
-
-    if (k != offsetsarr.length - 1) {
-        stopafter = (offsetsarr[k + 1] / 1000) + 0.01;
-    }
-
-    audio.play();
-
-    var pausing_function = function () {
-        if (this.currentTime >= stopafter) {
-            this.pause();
-            this.currentTime = 0;
-            stopafter = 10000;
-            // remove the event listener after you paused the playback
-            this.removeEventListener("timeupdate", pausing_function);
-            audio.playbackRate = 0.9;
-        }
-    };
-
-    audio.addEventListener("timeupdate", pausing_function);
-
-}
-
-function playwordind(word) {
-    var audio = document.getElementById('ttsaudio');
-    audio.playbackRate = 0.5;
-
-    for (var i = 0; i < wordaudiourls.length; i++) {
-        if (wordaudiourls[i].word == word) {
-            audio.src = wordaudiourls[i].objectUrl;
+    for (var i = 0; i < wordAudioUrls.length; i++) {
+        if (wordAudioUrls[i].word == word) {
+            audio.src = wordAudioUrls[i].objectUrl;
             audio.playbackRate = 0.7;
             audio.play();
             break;
@@ -134,22 +134,23 @@ function playwordind(word) {
     audio.addEventListener("ended", ending_function);
 }
 
-reftext.onclick = function () { handleWordClick() };
+refText.onclick = function () { handleWordClick() };
 
 function handleWordClick() {
     const activeTextarea = document.activeElement;
     var k = activeTextarea.selectionStart;
 
-    reftextval = reftext.value;
-    wordlist = reftextval.split(" ");
+    refTextVal = refText.value;
+    wordList = refTextVal.split(" ");
 
     var c = 0;
     var i = 0;
-    for (i = 0; i < wordlist.length; i++) {
-        c += wordlist[i].length;
+    for (i = 0; i < wordList.length; i++) {
+        c += wordList[i].length;
         if (c >= k) {
-            playwordind(wordlist[i]);
+            // playwordind(wordlist[i]);
             //playword(i);
+            playWord(wordList[i]);
             break;
         }
         c += 1;
@@ -174,23 +175,23 @@ var soundNotAllowed = function (error) {
 }
 
 //function for onclick of hear pronunciation button
-hbutton.onclick = function () {
-    reftextval = reftext.value;
+hearButton.onclick = function () {
+    refTextVal = refText.value;
 
-    if (reftextval != lastgettstext) {
-        document.getElementById("ttsloader").style.display = "block";
+    if (refTextVal != lastGetPhraseText) {
+        document.getElementById("phrase_loader").style.display = "block";
 
         var request = new XMLHttpRequest();
-        request.open('POST', '/gettts', true);
+        request.open('POST', '/get-phrase-text-to-speech', true);
         request.responseType = "blob";
 
         // Callback function for when request completes
         request.onload = () => {
-            var blobpronun = request.response;
+            var blobPronun = request.response;
             var offsets = request.getResponseHeader("offsets");
-            offsetsarr = offsets.substring(1, offsets.length - 1).replace(/ /g, "").split(',').map(Number);;
+            offsetsArr = offsets.substring(1, offsets.length - 1).replace(/ /g, "").split(',').map(Number);;
 
-            objectUrlMain = URL.createObjectURL(blobpronun);
+            objectUrlMain = URL.createObjectURL(blobPronun);
 
             var au = document.createElement('audio');
             var li = document.createElement('p');
@@ -198,7 +199,7 @@ hbutton.onclick = function () {
             //add controls to the <audio> element
             au.controls = true;
             au.autoplay = true;
-            au.id = "ttsaudio"
+            au.id = "phrase_audio"
             au.src = objectUrlMain;
 
             //add the new audio element to li
@@ -206,46 +207,46 @@ hbutton.onclick = function () {
 
             //add the li element to the ol
 
-            if (ttsList.hasChildNodes()) {
-                ttsList.lastChild.remove();
+            if (phrase.hasChildNodes()) {
+                phrase.lastChild.remove();
             }
 
-            ttsList.appendChild(li);
-            ttsList.style.display = "block";
+            phrase.appendChild(li);
+            phrase.style.display = "block";
 
-            document.getElementById("ttsloader").style.display = "none";
+            document.getElementById("phrase_loader").style.display = "none";
         }
         const dat = new FormData();
-        dat.append("reftext", reftextval);
+        dat.append("refText", refTextVal);
 
         //send request
         request.send(dat);
 
-        lastgettstext = reftextval;
+        lastGetPhraseText = refTextVal;
 
-        wordlist = reftextval.split(" ");
-        for (var i = 0; i < wordlist.length; i++) {
-            getttsforword(wordlist[i]);
+        wordList = refTextVal.split(" ");
+        for (var i = 0; i < wordList.length; i++) {
+            getPhraseForWord(wordList[i]);
         }
 
     }
     else {
-        console.log("TTS Audio for given text already exists. You may change ref text");
+        console.log("Phrase Audio for given text already exists. You may change ref text");
     }
 
     return false;
 }
 
-function getttsforword(word) {
+function getPhraseForWord(word) {
     var request = new XMLHttpRequest();
-    request.open('POST', '/getttsforword', true);
+    request.open('POST', '/get-phrase-text-to-speech-for-word', true);
     request.responseType = "blob";
 
     // Callback function for when request completes
     request.onload = () => {
-        var blobpronun = request.response;
-        var objectUrl = URL.createObjectURL(blobpronun);
-        wordaudiourls.push({ word, objectUrl });
+        var blobPronun = request.response;
+        var objectUrl = URL.createObjectURL(blobPronun);
+        wordAudioUrls.push({ word, objectUrl });
     }
     const dat = new FormData();
     dat.append("word", word);
@@ -254,18 +255,18 @@ function getttsforword(word) {
     request.send(dat);
 }
 
-//function for onclick of get tongue twister button
-ttbutton.onclick = function () {
+//function for onclick of get phrase button
+randomPhraseButton.onclick = function () {
     var request = new XMLHttpRequest();
-    request.open('POST', '/gettonguetwister', true);
+    request.open('POST', '/get-random-phrase', true);
 
     // Callback function for when request completes
     request.onload = () => {
         // Extract JSON data from request
         const data = JSON.parse(request.responseText);
-        reftextval = data.tt;
-        reftext.value = reftextval;
-        reftext.innerText = reftextval;
+        refTextVal = data.phrase;
+        refText.value = refTextVal;
+        refText.innerText = refTextVal;
 
     }
 
@@ -276,9 +277,9 @@ ttbutton.onclick = function () {
 }
 
 //function for handling main button clicks
-document.getElementById('buttonmic').onclick = function () {
+document.getElementById('record_button').onclick = function () {
 
-    if (reftext.value.length == 0) {
+    if (refText.value.length == 0) {
         alert("Reference Text cannot be empty!");
     }
     else {
@@ -307,11 +308,11 @@ document.getElementById('buttonmic').onclick = function () {
             }
 
             start = true;
-            reftext.readonly = true;
-            reftext.disabled = true;
-            ttbutton.disabled = true;
-            ttbutton.className = "btn";
-            reftextval = reftext.value;
+            refText.readonly = true;
+            refText.disabled = true;
+            randomPhraseButton.disabled = true;
+            randomPhraseButton.className = "btn";
+            refTextVal = refText.value;
 
             this.innerHTML = "<span class='fa fa-stop'></span>Stop";
             this.className = "red-button";
@@ -326,25 +327,25 @@ function fillDetails(words) {
         var countp = 0;
 
         if (w.ErrorType == "Omission") {
-            omittedwords += w.Word;
-            omittedwords += ', ';
+            omittedWords += w.Word;
+            omittedWords += ', ';
 
             var tdda = document.createElement('td');
             tdda.innerText = '-';
-            phonemerow.appendChild(tdda);
+            phonemeRow.appendChild(tdda);
 
             var tddb = document.createElement('td');
             tddb.innerText = '-';
-            scorerow.appendChild(tddb);
+            scoreRow.appendChild(tddb);
 
             var tdw = document.createElement('td');
             tdw.innerText = w.Word;
             tdw.style.backgroundColor = "orange";
-            wordrow.appendChild(tdw);
+            wordRow.appendChild(tdw);
         }
         else if (w.ErrorType == "Insertion") {
-            insertedwords += w.Word;
-            insertedwords += ', ';
+            insertedWords += w.Word;
+            insertedWords += ', ';
         }
         else if (w.ErrorType == "None" || w.ErrorType == "Mispronunciation") {
             for (var phonei in w.Phonemes) {
@@ -364,11 +365,11 @@ function fillDetails(words) {
                 else {
                     tdp.style.backgroundColor = "red";
                 }
-                phonemerow.appendChild(tdp);
+                phonemeRow.appendChild(tdp);
 
                 var tds = document.createElement('td');
                 tds.innerText = p.AccuracyScore;
-                scorerow.appendChild(tds);
+                scoreRow.appendChild(tds);
                 countp = Number(phonei) + 1;
             }
             var tdw = document.createElement('td');
@@ -384,7 +385,7 @@ function fillDetails(words) {
             else {
                 tdw.style.backgroundColor = "red";
             }
-            wordrow.appendChild(tdw);
+            wordRow.appendChild(tdw);
         }
 
     }
@@ -392,33 +393,33 @@ function fillDetails(words) {
 
 function fillData(data) {
 
-    document.getElementById("summarytable").style.display = "flex";
-    accuracyscore.innerText = data.AccuracyScore;
-    fluencyscore.innerText = data.FluencyScore;
-    completenessscore.innerText = data.CompletenessScore;
-    pronscore.innerText = parseInt(data.PronScore, 10);
+    document.getElementById("summary_table").style.display = "flex";
+    accuracyScore.innerText = data.AccuracyScore;
+    fluencyScore.innerText = data.FluencyScore;
+    completenessScore.innerText = data.CompletenessScore;
+    pronScore.innerText = parseInt(data.PronScore, 10);
 
     fillDetails(data.Words);
-    wordsomitted.innerText = omittedwords;
-    if (insertedwords != "") {
+    wordsOmitted.innerText = omittedWords;
+    if (insertedWords != "") {
         document.getElementById("wih").style.display = "block";
-        wordsinserted.style.display = "block";
-        wordsinserted.innerText = insertedwords;
+        wordsInserted.style.display = "block";
+        wordsInserted.innerText = insertedWords;
     }
 }
 
 function createDownloadLink(blob) {
 
-    document.getElementById("recordloader").style.display = "block";
+    document.getElementById("record_loader").style.display = "block";
 
-    document.getElementById("footeralert").style.display = "none";
+    document.getElementById("footer_alert").style.display = "none";
     var url = URL.createObjectURL(blob);
     var au = document.createElement('audio');
     var li = document.createElement('p');
     var link = document.createElement('a');
 
     //name of .wav file to use during upload and download (without extendion)
-    var filename = new Date().toISOString();
+    var fileName = new Date().toISOString();
 
     //add controls to the <audio> element
     au.controls = true;
@@ -428,11 +429,11 @@ function createDownloadLink(blob) {
     li.appendChild(au);
 
     //add the li element to html
-    recordingsList.appendChild(li);
-    recordingsList.style.display = "block";
+    recording.appendChild(li);
+    recording.style.display = "block";
 
     var request = new XMLHttpRequest();
-    request.open('POST', '/ackaud', true);
+    request.open('POST', '/ack-audio', true);
 
     // Callback function for when request completes
     request.onload = () => {
@@ -442,7 +443,7 @@ function createDownloadLink(blob) {
 
         if (data.RecognitionStatus == "Success") {
             fillData(data.NBest[0]);
-            document.getElementById("recordloader").style.display = "none";
+            document.getElementById("record_loader").style.display = "none";
             document.getElementById("metrics").style.display = "block";
         }
         else {
@@ -453,8 +454,8 @@ function createDownloadLink(blob) {
     }
     // Add data to send with request
     const data = new FormData();
-    data.append("audio_data", blob, filename);
-    data.append("reftext", reftextval);
+    data.append("audio_data", blob, fileName);
+    data.append("refText", refTextVal);
 
     //send request
     request.send(data);

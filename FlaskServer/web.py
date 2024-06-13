@@ -40,7 +40,7 @@ def favicon():
 def index():
     return render_template("index.html")
 
-@app.route("/gettoken", methods=["POST"])
+@app.route("/get-token", methods=["POST"])
 def gettoken():
     fetch_token_url = 'https://%s.api.cognitive.microsoft.com/sts/v1.0/issueToken' %region
     headers = {
@@ -72,9 +72,9 @@ def save_record():
     return "<h1>Success!</h1>"
 
 
-@app.route("/gettonguetwister", methods=["POST"])
-def gettonguetwister():
-    tonguetwisters = ["bhavataH nAma kim?",
+@app.route("/get-random-phrase", methods=["POST"])
+def getRandomPhrase():
+    phrases = ["bhavataH nAma kim?",
             "bhavatyAH nAma kim?",
             "mama nAma rAmaH",
             "mama nAma vidyA",
@@ -89,12 +89,12 @@ def gettonguetwister():
             "prAdhyApakaH",
             "prAdhyApikA"]
     
-    return jsonify({"tt":random.choice(tonguetwisters)})
+    return jsonify({"phrase":random.choice(phrases)})
 
-@app.route("/ackaud", methods=["POST"])
+@app.route("/ack-audio", methods=["POST"])
 def ackaud():
     f = request.files['audio_data']
-    reftext = request.form.get("reftext")
+    reftext = request.form.get("refText")
     #    f.save(audio)
     #print('file uploaded successfully')
 
@@ -140,9 +140,9 @@ def ackaud():
 
 
 # text to speech
-@app.route("/gettts", methods=["POST"])
-def gettts():
-    reftext = request.form.get("reftext")
+@app.route("/get-phrase-text-to-speech", methods=["POST"])
+def getPhraseTextToSpeech():
+    refText = request.form.get("refText")
     # Creates an instance of a speech config with specified subscription key and service region.
     speech_config = speechsdk.SpeechConfig(subscription=subscription_key, region=region)
     speech_config.speech_synthesis_voice_name = voice
@@ -161,7 +161,7 @@ def gettts():
     # The unit of evt.audio_offset is tick (1 tick = 100 nanoseconds), divide it by 10,000 to convert to milliseconds.
     speech_synthesizer.synthesis_word_boundary.connect(wordbound)
 
-    result = speech_synthesizer.speak_text_async(reftext).get()
+    result = speech_synthesizer.speak_text_async(refText).get()
     # Check result
     if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
         #print("Speech synthesized for text [{}]".format(reftext))
@@ -172,7 +172,7 @@ def gettts():
         
         response = make_response(audio_data)
         response.headers['Content-Type'] = 'audio/wav'
-        response.headers['Content-Disposition'] = 'attachment; filename=sound.wav'
+        response.headers['Content-Disposition'] = 'attachment; fileName=sound.wav'
         # response.headers['reftext'] = reftext
         response.headers['offsets'] = offsets
         return response
@@ -184,7 +184,7 @@ def gettts():
             print("Error details: {}".format(cancellation_details.error_details))
         return jsonify({"success":False})
 
-@app.route("/getttsforword", methods=["POST"])
+@app.route("/get-phrase-text-to-speech-for-word", methods=["POST"])
 def getttsforword():
     word = request.form.get("word")
 
@@ -208,7 +208,7 @@ def getttsforword():
         
         response = make_response(audio_data)
         response.headers['Content-Type'] = 'audio/wav'
-        response.headers['Content-Disposition'] = 'attachment; filename=sound.wav'
+        response.headers['Content-Disposition'] = 'attachment; fileName=sound.wav'
         # response.headers['word'] = word
         return response
         

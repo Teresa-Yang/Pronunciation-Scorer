@@ -16,7 +16,7 @@ h1, p{
     text-align: center;
 }
 
-#reftexthead{
+#ref_text_head{
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
 }
@@ -32,18 +32,17 @@ h1, p{
     flex-direction: column;
 }
 
-#ttscont {
-    background-color: rgb(237, 245, 245);
-}
 #metrics {
     background-color: rgba(172, 255, 47, 0.055);
 }
-#recordingsList{
+#recording{
+    display: none; 
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#ttsList{
+#phrase{
+    display: none; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,7 +54,7 @@ textarea{
     vertical-align: center;
 }
 
-#reftext{
+#ref_text{
     width: 100%;
     height: 60px;
     padding: 12px 20px;
@@ -135,20 +134,20 @@ button span {
     cursor: pointer;
 }
 
-#summarytable{
+#summary_table{
     border-spacing: 5px;
     margin: 20px;
     display: none;
     justify-content: center;
     align-items: center;
 }
-#summarytable table, th, td{
+#summary_table table, th, td{
     border:1px solid lightgrey;
     border-collapse: collapse;
     padding: 5px;
     text-align: center;
 }
-#detailedtable{
+#detailed_table{
     margin: 5px;
     border-spacing: 5px;
     overflow-x: auto;
@@ -156,26 +155,20 @@ button span {
     justify-content: center;
     align-items: center;
 }
-#detailedtable table{
+#detailed_table table{
     margin: auto;
 }
-#detailedtable table, th, td{
+#detailed_table table, th, td{
     text-align: center;
     border:1px solid lightgrey;
     border-collapse: collapse;
     padding: 5px;
 }
 
-#ttsList{
-    display: none; 
-}
-#recordingsList{
-    display: none; 
-}
-#ttsloader{
+#phrase_loader{
     display: none;
 }
-#recordloader{
+#record_loader{
     display: none;
 }
 #loader {

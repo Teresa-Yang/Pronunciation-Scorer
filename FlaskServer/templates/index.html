@@ -20,9 +20,9 @@
             <!-- <button id="start_button">Start recording</button>
             <button id="stop_button" disabled>Stop recording</button>
             <button id="random_button">Get a random phrase</button> -->
-            <button id="randomtt" class="blue-button"></span>Get a random phrase</button>
-            <button id="buttonhear" class="h-button">Hear pronunciation</button>
-            <button id="buttonmic" class="green-button">Record</button>
+            <button id="random_phrase_button">Get a random phrase</button>
+            <button id="hear_button">Hear pronunciation</button>
+            <button id="record_button" class="green-button">Record</button>
         </div> 
     </div>
 
@@ -33,39 +33,26 @@
     </div>
 
     <!-- reference textbox -->
-    <div class=container id="formcontainer">
-        <form id="reftextform">
-            <textarea id = "reftext" rows = "1" cols = "30" name = "reftext" maxlength="160" autofocus placeholder="Enter Reference Text here..."></textarea>
+    <div class=container id="form_container">
+        <form id="ref_text_form">
+            <textarea id = "ref_text" rows = "1" cols = "30" name = "reftext" maxlength="160" autofocus placeholder="Enter Reference Text here..."></textarea>
         </form>
         <br>
     </div>
-
-    <!-- getting the score -->
-    <!-- <div class="button-container">
-        <button id="randomtt" class="blue-button">
-            <span class="fa fa-random"></span>Get Tongue Twister</button>
-        <button id="buttonmic" class="green-button">
-            <span class="fa fa-microphone"></span>Record</button>
-            
-        <div class="center-container">
-            <button id="score_button">Get my score</button>
-            <p>Score:</p>
-        </div>
-    </div> -->
     
     <!-- audio player that pops out after reading text -->
-    <div class="center-container" id="ttsList">
+    <div class="center-container" id="phrase">
         <p>Prompt:</p>
     </div>
-    <div class="container" id="ttsloader">
+    <div class="container" id="phrase_loader">
         <div id="loader"></div>
     </div> 
 
     <!-- recorded audio -->
-    <div class="center-container" id="recordingsList">
+    <div class="center-container" id="recording">
         <p>Your Audio:</p>
     </div>
-    <div class="container" id="recordloader">
+    <div class="container" id="record_loader">
         <div id="loader"></div>
     </div>
 
@@ -73,7 +60,7 @@
     <div class="container">
         <div id="metrics" class="animate-bottom">
             <div class=container>
-                <div id="summarytable">
+                <div id="summary_table">
                     <table>
                         <tr>
                             <th>Accuracy Score</th>
@@ -84,23 +71,23 @@
                             <th id="wih">Extra Words Spoken</th>
                         </tr>
                         <tr>
-                            <td id="accuracyscore"></td>
-                            <td id="fluencyscore"></td>
-                            <td id="completenessscore"></td>
-                            <td id="pronscore"></td>
-                            <td id="wordsomitted"></td>
-                            <td id="wordsinserted"></td>
+                            <td id="accuracy_score"></td>
+                            <td id="fluency_score"></td>
+                            <td id="completeness_score"></td>
+                            <td id="pron_score"></td>
+                            <td id="words_omitted"></td>
+                            <td id="words_inserted"></td>
                         </tr>
                     </table>
                 </div>
             </div>
             
             <div class="container">
-                <div id="detailedtable">
+                <div id="detailed_table">
                     <table>
-                        <tr id="wordrow"></tr>
-                        <tr id ="phonemerow"></tr>
-                        <tr id ="scorerow"></tr>
+                        <tr id="word_row"></tr>
+                        <tr id ="phoneme_row"></tr>
+                        <tr id ="score_row"></tr>
                     </table>
                 </div>
             </div>
@@ -109,7 +96,7 @@
 
     </div>
     
-    <footer id=footeralert>Please allow the use of your microphone.</footer>
+    <footer id=footer_alert>Please allow the use of your microphone.</footer>
     
     <script src="{{ url_for('static', filename='index.js') }}"></script>
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
