@@ -1,37 +1,14 @@
-SpeechRecognition
-librosa
-torch
-torchaudio
 Flask
 Flask-Session
-numpy
-pandas
-scipy
-soundfile
-gunicorn
-
-
+requests
 azure-cognitiveservices-speech
 
-
-astroid
-certifi
-chardet
-click
-colorama
-Flask
-idna
-isort
-itsdangerous
-Jinja2
-lazy-object-proxy
-MarkupSafe
-mccabe
-pylint
-requests
-six
-toml
-typed-ast
-urllib3
-Werkzeug
-wrapt
+# SpeechRecognition
+# librosa
+# torch
+# torchaudio
+# numpy
+# pandas
+# scipy
+# soundfile
+# gunicorn

@@ -1,9 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- <title>सूक्तम्</title> -->
+    <title>Pronucniation Scorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+</head>
+
+<body>  
+    <h1>Pronunciation Scorer</h1>
+
+    <!-- Buttons and audio -->
+    <div class="container">
+        <div class="button-container">
+            <!-- <button id="start_button">Start recording</button>
+            <button id="stop_button" disabled>Stop recording</button>
+            <button id="random_button">Get a random phrase</button> -->
+            <button id="randomtt" class="blue-button"></span>Get a random phrase</button>
+            <button id="buttonhear" class="h-button">Hear pronunciation</button>
+            <button id="buttonmic" class="green-button">Record</button>
+        </div> 
+    </div>
+
+    <!-- reference text from files -->
+    <div >
+        <label for="sanskrit"></label><textarea readonly id="sanskrit" rows="1" cols="25">Sanskrit</textarea>
+        <label for="english"></label><textarea readonly id="english" rows="1" cols="25">English</textarea>
+    </div>
+
+    <!-- reference textbox -->
+    <div class=container id="formcontainer">
+        <form id="reftextform">
+            <textarea id = "reftext" rows = "1" cols = "30" name = "reftext" maxlength="160" autofocus placeholder="Enter Reference Text here..."></textarea>
+        </form>
+        <br>
+    </div>
+
+    <!-- getting the score -->
+    <!-- <div class="button-container">
+        <button id="randomtt" class="blue-button">
+            <span class="fa fa-random"></span>Get Tongue Twister</button>
+        <button id="buttonmic" class="green-button">
+            <span class="fa fa-microphone"></span>Record</button>
+            
+        <div class="center-container">
+            <button id="score_button">Get my score</button>
+            <p>Score:</p>
+        </div>
+    </div> -->
+    
+    <!-- audio player that pops out after reading text -->
+    <div class="center-container" id="ttsList">
+        <p>Prompt:</p>
+    </div>
+    <div class="container" id="ttsloader">
+        <div id="loader"></div>
+    </div> 
+
+    <!-- recorded audio -->
+    <div class="center-container" id="recordingsList">
+        <p>Your Audio:</p>
+    </div>
+    <div class="container" id="recordloader">
+        <div id="loader"></div>
+    </div>
+
+    <!-- scoring metric chart -->
+    <div class="container">
+        <div id="metrics" class="animate-bottom">
+            <div class=container>
+                <div id="summarytable">
+                    <table>
+                        <tr>
+                            <th>Accuracy Score</th>
+                            <th>Fluency Score</th>
+                            <th>Completeness Score</th>
+                            <th>Pronunciation Score</th>
+                            <th id="woh">Words Omitted</th>
+                            <th id="wih">Extra Words Spoken</th>
+                        </tr>
+                        <tr>
+                            <td id="accuracyscore"></td>
+                            <td id="fluencyscore"></td>
+                            <td id="completenessscore"></td>
+                            <td id="pronscore"></td>
+                            <td id="wordsomitted"></td>
+                            <td id="wordsinserted"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="container">
+                <div id="detailedtable">
+                    <table>
+                        <tr id="wordrow"></tr>
+                        <tr id ="phonemerow"></tr>
+                        <tr id ="scorerow"></tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+    <footer id=footeralert>Please allow the use of your microphone.</footer>
+    
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+
+</body>
+
+
+<!-- <head>
+    <meta charset="UTF-8">
+    <title>सूक्तम्</title>
     <title>Pronucniation Scorer</title>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
@@ -39,50 +155,9 @@
         <label for="score"></label><textarea readonly class="ta_fs" id="score" rows="5" cols="10"></textarea>
     </div>
 
-    <div id="metrics" class="animate-bottom">
-        <div class=container>
-            <div id="summarytable">
-                <table>
-                    <tr>
-                        <th>Accuracy Score</th>
-                        <th>Fluency Score</th>
-                        <th>Completeness Score</th>
-                        <th>Pronunciation Score</th>
-                        <th id="woh">Words Omitted</th>
-                        <th id="wih">Extra Words Spoken</th>
-                    </tr>
-                    <tr>
-                        <td id="accuracyscore"></td>
-                        <td id="fluencyscore"></td>
-                        <td id="completenessscore"></td>
-                        <td id="pronscore"></td>
-                        <td id="wordsomitted"></td>
-                        <td id="wordsinserted"></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="container">
-            <div id="detailedtable">
-                <table>
-                    <tr id="wordrow"></tr>
-                    <tr id="phonemerow"></tr>
-                    <tr id="scorerow"></tr>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
 </body>
 
-<script src="{{ url_for('static', filename='index.js') }}"></script>
-
-<!-- <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script> -->
-<!-- <script src="{{ url_for('static', filename='microsoft.cognitiveservices.speech.sdk.bundle.js') }}"></script> -->
- 
-<!-- <script>
+<script>
     let start_button_element = document.getElementById("start_button");
     let stop_button_element = document.getElementById("stop_button");
     let score_button_element = document.getElementById("score_button");
@@ -188,5 +263,6 @@
 
 
 </script> -->
+
 
 </html>

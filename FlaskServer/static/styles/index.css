@@ -1,69 +1,207 @@
-body {
+html, body {
+    padding-left: 5%;
+    margin-left: 5%;
+    padding-right: 5%;
+    margin-right: 5%;
+    padding-top: 10px;
+    margin-top: 10px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-h1, p, input {
+h1, p{
     font-family: 'Lato', sans-serif;
     text-align: center;
 }
 
-textarea {
+#reftexthead{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+.container {
+    align-items: center;
+    border-radius: 3px;
+}
+
+.center-container {
+    align-items: center;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+}
+
+#ttscont {
+    background-color: rgb(237, 245, 245);
+}
+#metrics {
+    background-color: rgba(172, 255, 47, 0.055);
+}
+#recordingsList{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#ttsList{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+textarea{
     resize: none;
     text-align: left;
     vertical-align: center;
 }
 
+#reftext{
+    width: 100%;
+    height: 60px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    background-color: #f8f8f8;
+    font-size: 20px ;
+    font-weight: bold;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.button-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 12px;
+}
 button {
+    width: auto;
+    text-align: center;
+    /* font-size: 20px; */
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 200ms linear;
+
     background-color: #0191FE;
     color: white;
     border-radius: 5px;
     border: none;
     padding: 10px 30px;
-    margin-bottom: 20px;
-}
 
+}
 button:hover {
+    background-color: #005291;
     cursor: pointer;
 }
 
-input:hover {
+button span {
+    display: block;
+    float: left;
+    margin-right: 10px;
+}
+
+.green-button {
+    background-color: #4CAF50;
+}
+.green-button:hover {
+    background-color: #3e8e41;
     cursor: pointer;
 }
 
-input[type="file"] {
+/* 
+.h-button {
+    background-color: rgb(77, 155, 155);
+}
+.h-button:hover {
+    background-color: rgb(28, 117, 117);
+    cursor: pointer;
+}
+
+.blue-button {
+    background-color: rgb(60, 128, 170);
+}
+.blue-button:hover {
+    background-color: rgb(30, 93, 133);
+    cursor: pointer;
+}*/
+
+.red-button {
+    background-color: #db6247;
+}
+.red-button:hover {
+    background-color: #cc5338;
+    cursor: pointer;
+}
+
+#summarytable{
+    border-spacing: 5px;
+    margin: 20px;
     display: none;
-}
-
-.ta_fs {
-    font-size: 16px;
-    color: #008cff;
-}
-
-.center-container {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
-
-.custom-file-upload {
-    font-family: 'Lato', sans-serif;
+#summarytable table, th, td{
+    border:1px solid lightgrey;
+    border-collapse: collapse;
+    padding: 5px;
     text-align: center;
-    font-size: 13px;
-    background-color: #0191FE;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    padding: 10px 30px;
-    margin-bottom: 20px;
-    cursor: pointer;
+}
+#detailedtable{
+    margin: 5px;
+    border-spacing: 5px;
+    overflow-x: auto;
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+#detailedtable table{
+    margin: auto;
+}
+#detailedtable table, th, td{
+    text-align: center;
+    border:1px solid lightgrey;
+    border-collapse: collapse;
+    padding: 5px;
 }
 
-#score_button {
-    margin-top: 40px;
+#ttsList{
+    display: none; 
+}
+#recordingsList{
+    display: none; 
+}
+#ttsloader{
+    display: none;
+}
+#recordloader{
+    display: none;
+}
+#loader {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    margin: 0px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 30px;
+    height: 30px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
 }
 
+@-webkit-keyframes spin {
+0% { -webkit-transform: rotate(0deg); }
+100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
 
 /* Add animation to "page content" */
 .animate-bottom {
@@ -84,15 +222,20 @@ from{ bottom:-100px; opacity:0 }
 to{ bottom:0; opacity:1 }
 }
 
-/* #submitButton {
-    background-color: #0191FE;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    padding: 10px 30px;
-    margin-top: 20px;
-} */
+#myDiv {
+display: none;
+text-align: center;
+}
 
-/* #speechTranscriptContainer {
-    margin-top: 20px;
-} */
+footer{
+    text-align: center;
+    font-size: x-small ;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+}
+
+@media only screen and (max-width: 500px) {
+    button {
+        font-size: 18px;
+    }
+}
