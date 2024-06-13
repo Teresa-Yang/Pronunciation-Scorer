@@ -71,28 +71,15 @@ def save_record():
 
     return "<h1>Success!</h1>"
 
-
 @app.route("/get-random-phrase", methods=["POST"])
 def getRandomPhrase():
-    phrases = ["bhavataH nAma kim?",
-            "bhavatyAH nAma kim?",
-            "mama nAma rAmaH",
-            "mama nAma vidyA",
-            "eShaH mama mitram kRuShNaH",
-            "bhavAn kim karoti?",
-            "aham adhyApakaH asmi",
-            "eShA mama sakhI gItA",
-            "bhavatI kim karoti?",
-            "aham vidyArthinI asmi",
-            "adhikArI",
-            "adhikAriNI",
-            "prAdhyApakaH",
-            "prAdhyApikA"]
-    
-    return jsonify({"phrase":random.choice(phrases)})
+    # gets a random phrase and audio from reference_files.txt
+    path = Path(__file__).parent.__str__() + "\\reference_files.txt"
+    lines = open(path, encoding="UTF-8").readlines()[1:]
+    return random.choice(lines)
 
 @app.route("/ack-audio", methods=["POST"])
-def ackaud():
+def ackAudio():
     f = request.files['audio_data']
     reftext = request.form.get("refText")
     #    f.save(audio)
@@ -184,8 +171,8 @@ def getPhraseTextToSpeech():
             print("Error details: {}".format(cancellation_details.error_details))
         return jsonify({"success":False})
 
-@app.route("/get-phrase-text-to-speech-for-word", methods=["POST"])
-def getttsforword():
+@app.route("/get-text-to-speech-for-word", methods=["POST"])
+def getTextToSpeechForWord():
     word = request.form.get("word")
 
     # Creates an instance of a speech config with specified subscription key and service region.

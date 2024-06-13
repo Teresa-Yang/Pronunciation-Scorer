@@ -226,7 +226,7 @@ hearButton.onclick = function () {
 
         wordList = refTextVal.split(" ");
         for (var i = 0; i < wordList.length; i++) {
-            getPhraseForWord(wordList[i]);
+            getTextToSpeechForWord(wordList[i]);
         }
 
     }
@@ -237,9 +237,9 @@ hearButton.onclick = function () {
     return false;
 }
 
-function getPhraseForWord(word) {
+function getTextToSpeechForWord(word) {
     var request = new XMLHttpRequest();
-    request.open('POST', '/get-phrase-text-to-speech-for-word', true);
+    request.open('POST', '/get-text-to-speech-for-word', true);
     request.responseType = "blob";
 
     // Callback function for when request completes
@@ -263,11 +263,18 @@ randomPhraseButton.onclick = function () {
     // Callback function for when request completes
     request.onload = () => {
         // Extract JSON data from request
-        const data = JSON.parse(request.responseText);
-        refTextVal = data.phrase;
+        // const data = JSON.parse(request.responseText);
+        // refTextVal = data.phrase;
+        // refText.value = refTextVal;
+        // refText.innerText = refTextVal;
+        const result = request.responseText;
+        const list = result.split(",");
+        document.getElementById('sanskrit').value = list[2];
+        document.getElementById('english').value = list[1];
+        refTextVal = list[1];
         refText.value = refTextVal;
         refText.innerText = refTextVal;
-
+        // audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
     }
 
     //send request
