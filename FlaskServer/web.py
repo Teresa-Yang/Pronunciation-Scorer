@@ -56,7 +56,7 @@ def get_random_line():
 # Home page, render the "index.html" template
 @app.route('/')
 def home():
-    return render_template('index.html', name=None)
+    return render_template('record.html', name=None)
 
 
 # Navigation will create GET request for website and POST request for audio data as mp3 file
