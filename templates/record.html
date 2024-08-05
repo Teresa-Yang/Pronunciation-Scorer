@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <title>सूक्तम्</title> -->
+    <title>Pronucniation Scorer</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
+</head>
+
+<body>
+    <h1>Pronunciation Scorer</h1>
+
+    <div>
+        <button id="start_button" disabled>Start recording</button>
+        <button id="stop_button" disabled>Stop recording</button>
+        <button id="random_button">Get a Random Phrase</button>
+    </div>
+
+    <div>
+        <label for="sanskrit"></label><textarea readonly id="sanskrit" rows="1" cols="25">Sanskrit</textarea>
+        <label for="english"></label><textarea readonly id="english" rows="1" cols="25">English</textarea>
+    </div>
+
+    <div>
+        <p>Your Audio:</p>
+        <audio controls id="recorded_audio"></audio>
+        <p>Prompt:</p>
+        <audio controls id="prompted_audio"></audio>
+    </div>
+
+    <div class="center-container">
+        <button id="score_button" disabled>Get my score</button>
+        <p>Score:</p>
+        <label for="score"></label><textarea readonly class="ta_fs" id="score" rows="5" cols="10"></textarea>
+    </div>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

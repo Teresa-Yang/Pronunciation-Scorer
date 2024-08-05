@@ -1,0 +1,15 @@
+audio_file, text_en,text_sa
+hackathon_data/2-Introductions_012.wav,bhavataH nAma kim?,भवतः नाम किम्?
+hackathon_data/2-Introductions_016.wav,bhavatyAH nAma kim?,भवत्याः नाम किम्?
+hackathon_data/2-Introductions_019.wav,mama nAma rAmaH,मम नाम रामः
+hackathon_data/2-Introductions_022.wav,mama nAma vidyA,मम नाम विद्या
+hackathon_data/2-Introductions_025.wav,eShaH mama mitram kRuShNaH,एषः मम मित्रं कृष्णः
+hackathon_data/2-Introductions_029.wav,bhavAn kim karoti?,भवान् किं करोति?
+hackathon_data/2-Introductions_032.wav,aham adhyApakaH asmi,अहम् अध्यापकः अस्मि
+hackathon_data/2-Introductions_037.wav,eShA mama sakhI gItA,एषा मम सखी गीता
+hackathon_data/2-Introductions_039.wav,bhavatI kim karoti?,भवती किं करोति?
+hackathon_data/2-Introductions_042.wav,aham vidyArthinI asmi,अहं विद्यार्थिनी अस्मि
+hackathon_data/2-Introductions_045.wav,adhikArI,अधिकारी
+hackathon_data/2-Introductions_049.wav,adhikAriNI,अधिकारिणी
+hackathon_data/2-Introductions_052.wav,prAdhyApakaH,प्राध्यापकः
+hackathon_data/2-Introductions_054.wav,prAdhyApikA,प्राध्यापिका
