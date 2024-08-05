@@ -25,7 +25,7 @@ This app is to help users improve their pronunciation. Built on top of what was 
 * You should be given a localhost link to open in your browser and view the application.
 
 ---
-If in the case that you get an additional error trying to run the scoring functions, you may need to set up **FFmpeg**.\\
+If in the case that you get an additional error trying to run the scoring functions, you may need to set up **FFmpeg**.
 * You can check and install FFmpeg from their site: https://www.ffmpeg.org/download.html
 * Tutorial for Windows: [How to install ffmpeg on Windows](https://www.youtube.com/watch?v=JR36oH35Fgg)
 * Tutorial for MacOS: [How to Install FFMPEG on Mac | Installing FFmpeg on macOS](https://youtu.be/dJ8y-VlMNAo) using [Homebrew](https://brew.sh)
