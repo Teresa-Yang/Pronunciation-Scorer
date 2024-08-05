@@ -21,7 +21,6 @@ This app is to help users improve their pronunciation. Built on top of what was 
       * `source env/bin/activate`
 * Install packages in the terminal/comand prompt with the requirements.txt file:
   * `pip install -r requirements.txt`
-* Run 'python main.py host-ip port debug(y/n)'.
-  * Example: `python main.py 127.0.0.1 5000 True` in the terminal/command prompt
+* Run `python main.py` in the terminal/command prompt.
 * You should be given a localhost link to open in your browser and view the application.
 
