@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>सूक्तम्</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <style>
+        textarea {
+            resize: none;
+            text-align: justify;
+            text-align-last: center;
+            font-size: 28px;
+            color: #0000ff;
+        }
+
+        .ta_fs {
+            font-size: 40px;
+            color: #ff0000;
+            text-align: center;
+        }
+
+        p,
+        div,
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <script>
+        base_url = "../wav/";
+        var rt =
+            [{ a: "2-012.wav", t: "भवतः नाम किम्?" },
+            { a: "2-016.wav", t: "भवत्याः नाम किम्?" },
+            { a: "2-019.wav", t: "मम नाम रामः" },
+            { a: "2-022.wav", t: "मम नाम विद्या" },
+            { a: "2-025.wav", t: "एषः मम मित्रं कृष्णः" },
+            { a: "2-029.wav", t: "भवान् किं करोति?" },
+            { a: "2-032.wav", t: "अहम् अध्यापकः अस्मि" },
+            { a: "2-037.wav", t: "एषा मम सखी गीता" },
+            { a: "2-039.wav", t: "भवती किं करोति?" },
+            { a: "2-042.wav", t: "अहं विद्यार्थिनी अस्मि" },
+            ]
+    </script> -->
+    <script src="{{ url_for('static', filename='sanskrit_audio_list.js') }}"></script>
+
+    <h2>सूक्तम् - Pronunciation Scorer</h2>
+    <div>
+        <button id="start_button" disabled>Start recording</button>
+        <button id="stop_button" disabled>Stop recording</button>
+        <button id="random_button">Get a Random Phrase</button>
+    </div>
+    <p>
+        <textarea readonly id="sanskrit" rows="2" cols="20">संस्कृतम्</textarea>
+        <textarea readonly id="english" rows="2" cols="20">saṃskṛtam</textarea>
+    </p>
+    <div>
+        <p> Prompt: </p>
+        <audio controls id="prompted_audio"></audio>
+    </div>
+    <p> Your Audio:</p>
+    <p> <audio controls id="recorded_audio"></audio></p>
+    <p> <button id="score_button">Get my score!</button></p>
+    <p>
+        <textarea readonly class="ta_fs" id="score" rows="2" cols="10">Score</textarea>
+    </p>
+</body>
+<script type="text/javascript">
+    let audio_name = '';
+    let rec = null;
+    let audioChunks = []
+    $("#score_button").click(function () {
+        $("#score_button").attr("disabled", true);
+        $.ajax({ type: 'GET', url: '/get_score/' + audio_name + "/", success: function (result) { $('#score').val(result); } });
+    });
+    $("#stop_button").click(function () {
+        $("#start_button").removeAttr("disabled")
+        $("#stop_button").attr("disabled", true);
+        rec.stop();
+    });
+    $("#start_button").click(function () {
+        $("#start_button").attr("disabled", true);
+        $("#stop_button").removeAttr("disabled");
+        $("#score_button").removeAttr("disabled");
+        $('#score').val('??');
+        audioChunks = [];
+        rec.start();
+    });
+    $("#random_button").click(function () {
+        $("#start_button").removeAttr("disabled");
+
+        ran=Math.floor((Math.random()*100))%rt.length;
+        $('#sanskrit').val(rt[ran].t);
+        $('#english').val(Sanscript.t(rt[ran].t,'devanagari','iast'));
+        audio_name = rt[ran].a.substring(0,rt[ran].a.indexOf(".wav"));
+        console.log(audio_name);
+        $("#prompted_audio").attr("src",base_url + rt[ran].a);
+        $("#prompted_audio").prop("controls", true);
+        $("#prompted_audio").attr("autoplay", true);
+
+        // $.ajax(
+        //     {
+        //         type: 'GET',
+        //         url: '/get_random_line',
+        //         success: function (result) {
+        //             const list = result.split(",");
+        //             $('#sanskrit').val(list[2]);
+        //             $('#english').val(list[1]);
+        //             audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
+        //             console.log(audio_name);
+
+        //             fetch('/get_random_audio/' + audio_name)
+        //                 .then(res => {
+        //                     return res.body.getReader().read().then(result => {
+        //                         return result
+        //                     });
+        //                 })
+        //                 .then(data => {
+        //                     const blob = new Blob([data.value], { type: "audio/mpeg-3" });
+
+        //                     $("#prompted_audio").attr("src", URL.createObjectURL(blob));
+        //                     console.log(URL.createObjectURL(blob));
+        //                     $("#prompted_audio").prop("controls", true);
+        //                     $("#prompted_audio").attr("autoplay", true);
+        //                 });
+        //         }
+        //     }
+        // );
+
+    });
+    navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then(stream => {
+            //create new recorder object
+            rec = new MediaRecorder(stream);
+            //stream data from recorder to list
+            rec.ondataavailable = e => {
+                audioChunks.push(e.data);
+                //once recorder is done send data to server
+                if (rec.state === "inactive") {
+                    let blob = new Blob(audioChunks, { type: 'audio/mpeg-3' });
+                    //enabled audio playback
+                    $("#recorded_audio").attr("src", URL.createObjectURL(blob));
+                    //create file to send to server
+                    const form = new FormData();
+                    form.append('file', blob, audio_name + ".mp3");
+                    $.ajax({ type: 'POST', url: '/save-record', data: form, cache: false, processData: false, contentType: false, success: function () { console.log("File Sent!"); } });
+                }
+            }
+        });
+</script>
+
+</html>
