@@ -71,7 +71,7 @@ def get_score(audio_id):
     return str(round(100 * scoring_functions.score_pronunciation(proper_series, user_series))) + '%'
 
 
-# To run locally you need to uncomment these 2 requests and fetch audio this way
+# --- To run locally ---
 
 # @app.route('/get_random_line', methods=['GET'])
 # def get_random_line():
@@ -90,6 +90,8 @@ def get_score(audio_id):
 #                 directory=path,
 #                 path=audio_id)
 #     return None
+
+# -------------------------------------------------------------
 
 if __name__ == "__main__":
     app.run(debug=True)

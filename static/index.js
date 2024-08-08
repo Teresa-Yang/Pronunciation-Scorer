@@ -41,6 +41,8 @@ random_button_element.onclick = () => {
     stop_button_element.disabled = true;
     score_button_element.disabled = true;
 
+    // --- To run on PythonAnywhere ---
+
     ran = Math.floor((Math.random() * 100)) % rt.length;
     $('#sanskrit').val(rt[ran].t);
     $('#english').val(Sanscript.t(rt[ran].t, 'devanagari', 'iast'));
@@ -50,8 +52,11 @@ random_button_element.onclick = () => {
     prompted_audio_element.controls = true;
     prompted_audio_element.autoplay = true;
 
+    // -------------------------------------------------------------
 
-    // Uncomment to run locally
+
+    // --- To run locally ---
+
     // $.ajax(
     //     {
     //         type: 'GET',
@@ -78,6 +83,8 @@ random_button_element.onclick = () => {
     //         }
     //     }
     // );
+    
+    // -------------------------------------------------------------
 };
 
 navigator.mediaDevices
