@@ -11,8 +11,10 @@ h1, p, input {
 
 textarea {
     resize: none;
-    text-align: left;
-    vertical-align: center;
+    text-align: justify;
+    text-align-last: center;
+    font-size: 28px;
+    color: #0000ff;
 }
 
 button {
@@ -42,8 +44,9 @@ input[type="file"] {
 }
 
 .ta_fs {
-    font-size: 16px;
-    color: #008cff;
+    font-size: 40px;
+    color: #ff0000;
+    text-align: center;
 }
 
 .center-container {

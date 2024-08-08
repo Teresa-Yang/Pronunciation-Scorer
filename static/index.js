@@ -40,32 +40,44 @@ random_button_element.onclick = () => {
     start_button_element.disabled = false;
     stop_button_element.disabled = true;
     score_button_element.disabled = true;
-    $.ajax(
-        {
-            type: 'GET',
-            url: '/get_random_line',
-            success: function (result) {
-                const list = result.split(",");
-                $('#sanskrit').val(list[2]);
-                $('#english').val(list[1]);
-                audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
 
-                fetch('/get_random_audio/' + audio_name)
-                    .then(res => {
-                        return res.body.getReader().read().then(result => {
-                            return result
-                        });
-                    })
-                    .then(data => {
-                        const blob = new Blob([data.value], { type: "audio/mpeg-3" });
+    ran = Math.floor((Math.random() * 100)) % rt.length;
+    $('#sanskrit').val(rt[ran].t);
+    $('#english').val(Sanscript.t(rt[ran].t, 'devanagari', 'iast'));
+    audio_name = rt[ran].a.substring(0, rt[ran].a.indexOf(".wav"));
+    console.log(audio_name);
+    prompted_audio_element.src = base_url + rt[ran].a;
+    prompted_audio_element.controls = true;
+    prompted_audio_element.autoplay = true;
 
-                        prompted_audio_element.src = URL.createObjectURL(blob);
-                        prompted_audio_element.controls = true;
-                        prompted_audio_element.autoplay = true;
-                    });
-            }
-        }
-    );
+
+    // Uncomment to run locally
+    // $.ajax(
+    //     {
+    //         type: 'GET',
+    //         url: '/get_random_line',
+    //         success: function (result) {
+    //             const list = result.split(",");
+    //             $('#sanskrit').val(list[2]);
+    //             $('#english').val(list[1]);
+    //             audio_name = list[0].substring(list[0].indexOf("/") + 1, list[0].lastIndexOf("."));
+
+    //             fetch('/get_random_audio/' + audio_name)
+    //                 .then(res => {
+    //                     return res.body.getReader().read().then(result => {
+    //                         return result
+    //                     });
+    //                 })
+    //                 .then(data => {
+    //                     const blob = new Blob([data.value], { type: "audio/mpeg-3" });
+
+    //                     prompted_audio_element.src = URL.createObjectURL(blob);
+    //                     prompted_audio_element.controls = true;
+    //                     prompted_audio_element.autoplay = true;
+    //                 });
+    //         }
+    //     }
+    // );
 };
 
 navigator.mediaDevices

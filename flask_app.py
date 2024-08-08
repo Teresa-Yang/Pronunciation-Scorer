@@ -3,21 +3,25 @@ import random
 from pathlib import Path
 from flask import Flask, render_template, flash, request, redirect, send_from_directory
 from librosa import load
-#hht from ScoringFunctions import scoring_functions_withVAD
+# from ScoringFunctions import scoring_functions_withVAD
 from ScoringFunctions import scoring_functions
 
-#from flask_session import Session
+_path = Path(__file__).parent.__str__() + "/files"
+if not os.path.exists(_path):
+    os.mkdir(_path)
 
 UPLOAD_FOLDER = 'files'
 app = Flask(__name__)
-
-#sess = Session()
 
 app.config['SECRET_KEY'] = 'secret_secret'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SESSION_TYPE'] = 'filesystem'
 
-#sess.init_app(app)
+
+# Dummy response to satisfy website if it does get request to .../favicon.ico
+@app.route('/favicon.ico', methods=['GET'])
+def favicon():
+    return '<h1></h1>'
 
 @app.route('/')
 def hello_world():
@@ -42,7 +46,7 @@ def save_record():
             redirect(request.url)
 
         # save file in hosts dir
-        path = Path(__file__).parent.__str__() + f"\\files\\{file.filename}"
+        path = Path(__file__).parent.__str__() + f"/files/{file.filename}"
         file.save(path)
 
         return "<h1>Success!</h1>"
@@ -55,7 +59,7 @@ def save_record():
 @app.route('/get_score/<audio_id>/', methods=['GET'])
 def get_score(audio_id):
     # find user audio from "files"
-    path_user = Path(__file__).parent.__str__() + "\\files\\" + audio_id + ".mp3"
+    path_user = Path(__file__).parent.__str__() + "/files/" + audio_id + ".mp3"
 
     # find corresponding proper audio
     path_proper = Path(__file__).parent.__str__() + "/wav/" + audio_id + ".wav"
@@ -66,6 +70,9 @@ def get_score(audio_id):
     #return str(round(100 * scoring_functions_withVAD.score_pronunciation(proper_series, user_series))) + '%'
     return str(round(100 * scoring_functions.score_pronunciation(proper_series, user_series))) + '%'
 
+
+# To run locally you need to uncomment these 2 requests and fetch audio this way
+
 # @app.route('/get_random_line', methods=['GET'])
 # def get_random_line():
 #     # path = Path(__file__).parent.__str__() + "/reference_files.txt"
@@ -75,7 +82,6 @@ def get_score(audio_id):
 
 # @app.route('/get_random_audio/<audio_id>/', methods=['GET'])
 # def get_random_audio(audio_id):
-#     # path = Path(__file__).parent.__str__() + "/hackathon_data"
 #     path = Path(__file__).parent.__str__() + "/wav"
 #     audio_id = audio_id + ".wav"
 #     for file in os.listdir(path):
