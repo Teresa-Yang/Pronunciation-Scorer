@@ -75,8 +75,7 @@ def get_score(audio_id):
 
 # @app.route('/get_random_line', methods=['GET'])
 # def get_random_line():
-#     # path = Path(__file__).parent.__str__() + "/reference_files.txt"
-#     path = Path(__file__).parent.__str__() + "/wav_reference_files.txt"
+#     path = Path(__file__).parent.__str__() + "/reference_files.txt"
 #     lines = open(path, encoding="UTF-8").readlines()[1:]
 #     return random.choice(lines)
 

@@ -1,5 +1,6 @@
 base_url = "/wav/";
 var rt = [
+    // { a: "Hello_by_destiny.wav", t: "hello"},
     { a: "2-012.wav", t: "भवतः नाम किम्?" },
     { a: "2-016.wav", t: "भवत्याः नाम किम्?" },
     { a: "2-019.wav", t: "मम नाम रामः" },

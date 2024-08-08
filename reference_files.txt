@@ -1,15 +1,16 @@
 audio_file, text_en,text_sa
-hackathon_data/2-012.wav,bhavataH nAma kim?,भवतः नाम किम्?
-hackathon_data/2-016.wav,bhavatyAH nAma kim?,भवत्याः नाम किम्?
-hackathon_data/2-019.wav,mama nAma rAmaH,मम नाम रामः
-hackathon_data/2-022.wav,mama nAma vidyA,मम नाम विद्या
-hackathon_data/2-025.wav,eShaH mama mitram kRuShNaH,एषः मम मित्रं कृष्णः
-hackathon_data/2-029.wav,bhavAn kim karoti?,भवान् किं करोति?
-hackathon_data/2-032.wav,aham adhyApakaH asmi,अहम् अध्यापकः अस्मि
-hackathon_data/2-037.wav,eShA mama sakhI gItA,एषा मम सखी गीता
-hackathon_data/2-039.wav,bhavatI kim karoti?,भवती किं करोति?
-hackathon_data/2-042.wav,aham vidyArthinI asmi,अहं विद्यार्थिनी अस्मि
-hackathon_data/2-045.wav,adhikArI,अधिकारी
-hackathon_data/2-049.wav,adhikAriNI,अधिकारिणी
-hackathon_data/2-052.wav,prAdhyApakaH,प्राध्यापकः
-hackathon_data/2-054.wav,prAdhyApikA,प्राध्यापिका
+wav/Hello_by_destiny.wav,hello,hello
+wav/2-012.wav,bhavataH nAma kim?,भवतः नाम किम्?
+wav/2-016.wav,bhavatyAH nAma kim?,भवत्याः नाम किम्?
+wav/2-019.wav,mama nAma rAmaH,मम नाम रामः
+wav/2-022.wav,mama nAma vidyA,मम नाम विद्या
+wav/2-025.wav,eShaH mama mitram kRuShNaH,एषः मम मित्रं कृष्णः
+wav/2-029.wav,bhavAn kim karoti?,भवान् किं करोति?
+wav/2-032.wav,aham adhyApakaH asmi,अहम् अध्यापकः अस्मि
+wav/2-037.wav,eShA mama sakhI gItA,एषा मम सखी गीता
+wav/2-039.wav,bhavatI kim karoti?,भवती किं करोति?
+wav/2-042.wav,aham vidyArthinI asmi,अहं विद्यार्थिनी अस्मि
+wav/2-045.wav,adhikArI,अधिकारी
+wav/2-049.wav,adhikAriNI,अधिकारिणी
+wav/2-052.wav,prAdhyApakaH,प्राध्यापकः
+wav/2-054.wav,prAdhyApikA,प्राध्यापिका
