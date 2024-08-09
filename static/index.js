@@ -28,14 +28,14 @@ random_button_element.onclick = () => {
     score_button_element.disabled = true;
 
     // --- To run on PythonAnywhere ---
-    ran = Math.floor((Math.random() * 100)) % rt.length;
-    $('#sanskrit').val(rt[ran].t);
-    $('#english').val(Sanscript.t(rt[ran].t, 'devanagari', 'iast'));
-    audio_name = rt[ran].a.substring(0, rt[ran].a.indexOf(".wav"));
-    console.log(audio_name);
-    prompted_audio_element.src = base_url + rt[ran].a;
-    prompted_audio_element.controls = true;
-    prompted_audio_element.autoplay = true;
+    // ran = Math.floor((Math.random() * 100)) % rt.length;
+    // $('#sanskrit').val(rt[ran].t);
+    // $('#english').val(Sanscript.t(rt[ran].t, 'devanagari', 'iast'));
+    // audio_name = rt[ran].a.substring(0, rt[ran].a.indexOf(".wav"));
+    // console.log(audio_name);
+    // prompted_audio_element.src = base_url + rt[ran].a;
+    // prompted_audio_element.controls = true;
+    // prompted_audio_element.autoplay = true;
     // -------------------------------------------------------------
 
     // --- To run locally ---
