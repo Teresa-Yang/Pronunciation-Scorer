@@ -73,22 +73,22 @@ def get_score(audio_id):
 
 # --- To run locally ---
 
-# @app.route('/get_random_line', methods=['GET'])
-# def get_random_line():
-#     path = Path(__file__).parent.__str__() + "/reference_files.txt"
-#     lines = open(path, encoding="UTF-8").readlines()[1:]
-#     return random.choice(lines)
+@app.route('/get_random_line', methods=['GET'])
+def get_random_line():
+    path = Path(__file__).parent.__str__() + "/reference_files.txt"
+    lines = open(path, encoding="UTF-8").readlines()[1:]
+    return random.choice(lines)
 
-# @app.route('/get_random_audio/<audio_id>/', methods=['GET'])
-# def get_random_audio(audio_id):
-#     path = Path(__file__).parent.__str__() + "/wav"
-#     audio_id = audio_id + ".wav"
-#     for file in os.listdir(path):
-#         if file.endswith(audio_id):
-#             return send_from_directory(
-#                 directory=path,
-#                 path=audio_id)
-#     return None
+@app.route('/get_random_audio/<audio_id>/', methods=['GET'])
+def get_random_audio(audio_id):
+    path = Path(__file__).parent.__str__() + "/wav"
+    audio_id = audio_id + ".wav"
+    for file in os.listdir(path):
+        if file.endswith(audio_id):
+            return send_from_directory(
+                directory=path,
+                path=audio_id)
+    return None
 
 # -------------------------------------------------------------
 
