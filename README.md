@@ -21,9 +21,9 @@ This app is to help users improve their pronunciation. Built on top of what was 
       * `source env/bin/activate`
 * Install packages in the terminal/comand prompt with the requirements.txt file:
   * `pip install -r requirements.txt`
-* Go through the `flask_app.py` and `index.js` and uncomment where indicated to run locally.
 * Run `python flask_app.py` in the terminal/command prompt.
 * You should be given a localhost link to open in your browser and view the application.
+* NOTE: Go through the `index.js` and change `developMode = false` if needed to run on hosting platform.
 
 ---
 If in the case that you get an additional error trying to run the scoring functions, you may need to set up **FFmpeg**.
