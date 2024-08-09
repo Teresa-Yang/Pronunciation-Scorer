@@ -8,13 +8,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
+    <!-- <style>
+        /* Adjust the progress bar to be shorter and resemble a slide bar */
+        #progress_bar_container {
+            width: 80%; /* Adjust width as needed */
+            background-color: #e0e0e0;
+            height: 10px; /* Shorter height for a slide bar appearance */
+            display: none; /* Initially hidden */
+            border-radius: 5px;
+            margin: 10px auto; /* Center horizontally */
+        }
+
+        #progress_bar {
+            width: 0%;
+            height: 100%;
+            background-color: #76c7c0;
+            border-radius: 5px;
+        }
+    </style> -->
 </head>
 
 <body>
     <h2>सूक्तम् - Pronunciation Scorer</h2>
     <div>
         <button id="start_button" disabled>Start recording</button>
-        <button id="stop_button" disabled>Stop recording</button>
         <button id="random_button">Get a Random Phrase</button>
     </div>
     <p>
@@ -26,6 +43,11 @@
         <audio controls id="prompted_audio"></audio>
         <p> Your Audio:</p>
         <audio controls id="recorded_audio"></audio>
+    </div>
+
+    <!-- Slide bar-style progress bar -->
+    <div id="progress_bar_container">
+        <div id="progress_bar"></div>
     </div>
 
     <div class="center-container"></div>
