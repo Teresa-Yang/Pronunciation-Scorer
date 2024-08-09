@@ -58,3 +58,20 @@ input[type="file"] {
 #score_button {
     margin-top: 40px;
 }
+
+/* Adjust the progress bar to be shorter and resemble a slide bar */
+#progress_bar_container {
+    width: 80%; /* Adjust width as needed */
+    background-color: #e0e0e0;
+    height: 10px; /* Shorter height for a slide bar appearance */
+    display: none; /* Initially hidden */
+    border-radius: 5px;
+    margin: 10px auto; /* Center horizontally */
+}
+
+#progress_bar {
+    width: 0%;
+    height: 100%;
+    background-color: #76c7c0;
+    border-radius: 5px;
+}
