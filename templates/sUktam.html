@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>सूक्तम्</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
 </head>
@@ -32,10 +33,14 @@
         <div id="progress_bar"></div>
     </div>
 
-    <div class="center-container"></div>
+    <div class="center_container"></div>
         <button id="score_button" disabled>Get my score</button>
         <p>Score:</p>
-        <label for="score"></label><textarea readonly class="ta_fs" id="score" rows="5" cols="10"></textarea>
+        <div id="score_loader_container">
+            <div id="loader"></div>
+        </div>
+        <label for="score"></label><textarea readonly class="ta_fs" id="score" rows="2" cols="6"></textarea>
+        
     </div>
 
     <script src="{{ url_for('static', filename='sanskrit_audio_list.js') }}"></script>

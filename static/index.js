@@ -17,10 +17,13 @@ let developMode = true; // Set to false to run in hosting platform (PythonAnyway
 
 score_button_element.onclick = () => {
     score_button_element.disabled = true;
+    document.getElementById("score_loader_container").style.display = "block";
     $.ajax({
         type: 'GET',
         url: '/get_score/' + audio_name + "/",
         success: function (result) {
+            document.getElementById("score_loader_container").style.display = "none";
+            document.getElementById("score").style.display = "block";
             $('#score').val(result);
         }
     });
